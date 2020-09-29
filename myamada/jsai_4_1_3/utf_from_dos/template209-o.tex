@@ -1,0 +1,35 @@
+%% 論文形式以外の原稿のテンプレート
+%% 原稿の種類に応じて \documentstyle の前の % をとってください
+\documentstyle[commentary]{jsai}        % 巻頭言
+% \documentstyle[foreword]{jsai}        % 特集に・・・にあたって
+% \documentstyle[essay]{jsai}           % 随想
+% \documentstyle[laboratoryreport]{jsai}% 研究室紹介
+% \documentstyle[eventreport]{jsai}  	% イベントだより
+% \documentstyle[conferencereport]{jsai}% 会議報告
+% \documentstyle[glossary]{jsai}        % 用語解説
+% \documentstyle[bookreview]{jsai}      % 書評
+% \documentstyle[paperview]{jsai}       % 文献紹介
+% \documentstyle[calendar]{jsai}        % カレンダー
+
+% \setcounter{page}{1}
+% \setcounter{volpage}{1}
+
+\Vol{12}
+\No{5}
+\jtitle{タイトル}
+% \jsubtitle{サブタイトル}
+\author{\commentator{著者名}{日本語所属名}}
+
+\begin{document}
+\maketitle
+
+本文
+
+\begin{Calendar}{会議などの名称}% カレンダーのときに必要
+ \Date{開催日付}
+ \Location{開催場所}
+ \Contact{連絡先}
+ \Note{注意書き}
+\end{Calendar}
+
+\end{document}

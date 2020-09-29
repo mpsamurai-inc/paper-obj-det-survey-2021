@@ -1,0 +1,10 @@
+  272  cd ../utf_from_sty/
+  273  ll
+  274  nkf -w --overwrite *.tex
+  275  ll
+  276  more template-j.tex
+  277  platex template-j
+  278  bibtex template-j
+  279  platex template-j
+  280  dvipdfmx template-j
+  281  history > history.txt

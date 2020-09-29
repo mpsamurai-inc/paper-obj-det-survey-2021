@@ -1,0 +1,72 @@
+%% Template for English Papers
+ \documentstyle[english]{jsai}                   % English Original Paper
+% \documentstyle[blindreview,english]{jsai}      % Paper for Blind Review
+%
+% \documentstyle[english,shortpaper]{jsai}       % English Short Paper
+% \documentstyle[english,exploratorypaper]{jsai} % Exploratory Research Paper
+
+% \setcounter{page}{1}
+% \setcounter{volpage}{1}
+
+\Vol{12}
+\No{1}
+\etitle{Title}
+% \etitle[English Title for Headers]{English Title}
+% \esubtitle{English Sub-Title}
+
+\manyauthor % delete if the number of authors is less than 4
+
+% when authers whose affilication is the same is succeed, 
+% use \affiliation macro for the top of the succeed authers 
+% and use \sameaffiliation for the rest of the authors.
+
+\author{%
+ \name{FirstName1}{LastName1}
+ \affiliation{Affiliation1 in English}%
+     {user1@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user1/}
+\and
+ \name{FirstName2}{LastName2}
+ \affiliation{Affiliation2 in English }%
+     {user2@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user2/}
+\and
+ \longname{VeryVeryLongFirstName3}{VeryVeryLongLastName3}
+ \sameaffiliation{user3@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user3/}
+\and
+ \name{FirstName4}{LastName4}
+ \sameaffiliation{user4@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user4/}
+\and
+ \name{FirstName5}{LastName5}
+ \affiliation{Affiliation1\ in English}{}
+}
+\begin{keyword}
+2-5 English keywords. These words should be written in lowercase
+except for abbreviations or proper nouns
+\end{keyword}
+
+\begin{summary}
+summary in English, of which length is 200-500 words for regular
+papers, and 200 words for short notes.
+\end{summary}
+
+\begin{document}
+\maketitle
+
+\section{Section}
+\subsection{Subsection}
+\subsubsection{Subsubsection}
+An example of citation\cite{latex,texbook}
+\begin{acknowledgment}
+Acknowledgments
+\end{acknowledgment}
+
+\bibliography{btxsample}
+\bibliographystyle{jsai}
+
+\appendix
+\section{Appendix}
+
+\begin{biography}
+\profile{m}{LastName1, FirstName1}{First Author's Profile}
+\end{biography}
+
+\end{document}

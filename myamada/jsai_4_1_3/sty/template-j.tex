@@ -1,0 +1,115 @@
+%% 和文論文用のテンプレート
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 1. 和文原稿
+ \documentclass[originalpaper]{jsaiart}     % 原著論文 Original Paper
+% \documentclass[blindreview]{jsaiart}      % 査読用
+%
+% \documentclass[shortpaper]{jsaiart}       % 速報論文 Short Paper
+% \documentclass[exploratorypaper]{jsaiart} % 萌芽論文 Exploratory Research Paper
+% \documentclass[Specialissue]{jsaiart}     % 特集 Special Issue
+% \documentclass[specialissue]{jsaiart}     % 小特集 Special Issue
+% \documentclass[interimreport]{jsaiart}    % 報告 An Interim Report
+% \documentclass[surveypaper]{jsaiart}      % 解説 Survey Paper
+% \documentclass[aimap]{jsaiart}            % AIマップ AI map
+% \documentclass[specialpaper]{jsaiart}     % 特集論文 Special Paper
+% \documentclass[invitedpaper]{jsaiart}     % 招待論文 Invited Paper
+%
+
+%% ページ番号の指定，掲載時に学会の方で決定します．
+% \setcounter{page}{1}
+% \setcounter{volpage}{1}
+
+
+%%% amsmathパッケージの注意点 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \usepackpage{amsmath}
+% 数式番号の参照は \ref ではなく，\eqref を用いること
+% documentclass のオプションに fleqnを指定すること
+% 例: \documentclass[technicalpaper,fleqn]{jsaiart}
+
+\Vol{12}
+\No{1}
+\jtitle{和文タイトル}
+% \jtitle[柱用和文タイトル]{和文タイトル}
+\jsubtitle{和文サブタイトル}
+\etitle{Title in English}
+\esubtitle{英文サブタイトル}
+
+\manyauthor % 著者が3名以下の場合はこの行を消すこと
+
+%%% 著者名の注意点 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 所属先が同じ著者が連続する場合，その中の先頭の著者のみ \affiliation
+% を用い，残りの所属先には \sameaffiliation を使う
+% ただし，所属先が同じでも連続していない場合は \affliation を使う
+% 名前が長い場合は \name の代りに \longname を使う
+
+\author{%
+ \name{著者1姓}{名}{Auther1 Roman Name}
+ \affiliation{日本語所属名1}%
+     {Affiliation1 in English }%
+     {user1@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user1/}
+\and
+ \name{著者2姓}{名}{Auther2 Roman Name}
+ \affiliation{日本語所属名2}%
+     {Affiliation2 in English}%
+     {user2@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user2/}
+\and
+ \name{著者3姓}{名}{Auther3 Roman Name}
+ \sameaffiliation{user3@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user3/}
+\and
+ \longname{カタガナガキノ}{ナガイナガイナマエ}{VeryLong Roman Name}
+ \sameaffiliation{user4@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user4/}
+\and
+ \name{著者5姓}{名}{Auther5 Roman Name}
+ \affiliation{日本語所属名1}%
+     {Affiliation1 in English}%
+     {user5@ai-gakkai.or.jp, http://www.ai-gakkai.or.jp/~user5/}
+}
+
+\begin{keyword}
+キーワードとして，小文字（固有名詞や略語を除く）の英単語を2〜5個指定
+\end{keyword}
+
+\begin{summary}
+「ショートノート」は 200 ワード，それ以外は200〜500 ワード
+以内の英文でsummaryを記す
+\end{summary}
+
+\begin{document}
+\maketitle
+
+\section{はじめに}
+引用の例\cite{latex,texbook}
+\section{従来の手法の問題点}
+\section{今回の改良点}
+\section{実験}
+\subsection{実験手法}
+\subsection{実験結果}
+\subsubsection{実験1}
+\subsubsection{実験2}
+\section{まとめ}
+
+\begin{acknowledgment}
+謝辞について
+\end{acknowledgment}
+
+\bibliography{btxsample}
+\bibliographystyle{jsai}
+
+\appendix
+
+\section{付録のタイトル1}
+
+付録の本文1
+
+\section{付録のタイトル2}
+
+付録の本文2
+
+% 著者の姓と名の間は半角スペースで区切る
+% 略歴は200字以内
+\begin{biography}
+\profile{m}{著者1姓 名}{著者1の略歴}
+%\profile*{m}{著者姓 名}{前掲\kern-.5zw （Vol.X，No.Y，p.Z）\kern-.5zw 参照．}
+\end{biography}
+
+\end{document}

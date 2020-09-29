@@ -1,0 +1,1100 @@
+\documentclass{jsai2e}
+
+\usepackage{graphics}
+\usepackage{fancybox}
+\usepackage{comment}
+
+%%%%% LaTeXなどのロゴの定義
+\makeatletter
+\catcode`\@=11
+\font\eightsy=cmsy8
+\def\AMSTeX{\leavevmode
+\hbox{$\scriptstyle\cal A$}\kern-.25em
+ \lower.4ex\hbox{\eightsy M}\kern-.1em{$\cal S$}-\TeX}
+\catcode`\@=\active
+\def\LaTeX{{\rm L\kern-.36em\raise.3ex\hbox{$\scriptstyle {\rm A}$}\kern-.15em
+ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\def\JTeX{\leavevmode\lower.5ex\hbox{J}\kern-.17em\TeX}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em%
+ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\def\StyleFile{{\tt jsai2e.cls}}\tt
+\def\JBibTeX{\leavevmode\lower .6ex\hbox{J}\kern-0.15em\BibTeX}
+\def\LaTeXe{\LaTeX\kern.15em2$_{\textstyle\varepsilon}$}
+\def\Stylefile2e{{\tt jsai2e.cls}}
+\makeatother
+
+%%%%% その他のマクロ
+\verbatimbaselineskip.5\baselineskip
+\def\verbatimsize{\small}%%{\normalsize}
+\def\tbs{{\tt \char'134}} % \
+\def\tob{{\tt \char'173}} % {
+\def\tcb{{\tt \char'175}} % }
+\newcommand{\bsl}[1]{{$\mathtt{\backslash}$}\texttt{#1}}
+\newcommand{\ltt}[1]{\texttt{\small{}#1}}
+
+\newenvironment{verbfbox}%
+{\VerbatimEnvironment%
+\begin{Sbox}\begin{minipage}{79mm}\footnotesize\begin{Verbatim}}%
+{\end{Verbatim}\end{minipage}\end{Sbox}
+\cornersize*{3mm}\setlength{\fboxsep}{1mm}\par\noindent\ovalbox{\TheSbox}}
+
+\newenvironment{verbFbox}%
+{\VerbatimEnvironment%
+\begin{Sbox}\begin{minipage}{77mm}\small\begin{Verbatim}}%
+{\end{Verbatim}\end{minipage}\end{Sbox}%
+\setlength{\fboxsep}{1.4mm}\par\noindent\doublebox{\TheSbox}\par}
+
+\raggedbottom
+\pagestyle{plain}
+
+\jtitle{人工知能学会\LaTeX{}スタイルファイルの使い方}
+\etitle{How to Use a \LaTeX{} Style File (\StyleFile)}
+
+\author{%
+\longname{人工知能学会}{\StyleFile{}担当}{JSAI Style File Group}
+\affiliation{人工知能学会}%
+{Japanese Society for Artificial Intelligence}%
+{editor@ai-gakkai.or.jp,
+http://www.ai-gakkai.or.jp/jsai/journal/download.html}}
+
+\rm
+\begin{summary}
+This is the guide for \StyleFile{},
+for the Journal of Japanese Society for Artificial Intelligence. 
+\end{summary}
+
+\begin{document}
+\maketitle
+
+\section{まえがき}\label{sec:intro}
+
+このスタイルファイル（\StyleFile{}）は，人工知能学会の論文などの原
+稿を作成するためのものです．
+アスキー版日本語 p\TeX{}のVersion p2.1.5以降を対象としています．
+\LaTeX209も利用できますが（\ref{latex209}），最終組版はp\TeX{}
+で行うため，完全に同じ出力は保証できません．
+
+このスタイルファイルでは本誌の組版体裁に従って調整していますので，
+スタイルファイルの変更は一切しないでください．
+
+\LaTeXe 用のクラスファイルとテンプレートです．
+\medskip
+
+{\small
+\begin{tabular}{ll}
+\hline
+\ltt{jsaiart.cls}    & 論文用クラスファイル\\
+\ltt{jsaiopt.cls}    & 論文以外のクラスファイル\\
+\ltt{jsai2e.cls}     & 共通部分用クラスファイル\\\hline
+\ltt{template-j.tex} & 日本語論文用テンプレート\\
+\ltt{template-e}     & 英語論文用テンプレート\\
+\ltt{template-o}     & 論文以外のテンプレート\\\hline
+\end{tabular}
+}
+\medskip
+
+補助用の\ltt{jsai2e.cls}は必要ですので
+\ltt{jsaiart.cls} や \ltt{jsaiopt.cls} と同じ場所においてください．
+
+\subsection{このガイドの構成}
+
+人工知能学会の原稿は次のように分類できます．
+\medskip
+
+\begin{center}
+\begin{small}
+\begin{tabular}{@{}lp{17zw}@{}}
+\hline
+\noalign{\vskip1mm}
+論文形式 & 原著論文，萌芽論文，速報論文，特集論文，招待論文，
+特集，小特集，報告，解説，AIマップ\\
+\noalign{\vskip1mm}
+\hline
+\noalign{\vskip1mm}
+論文以外の形式 & 巻頭言，研究室紹介，随想，イベントだより，
+会議報告，用語解説，書評，文献紹介，カレンダー，
+私のブックマーク\\
+\noalign{\vskip1mm}
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\medskip
+
+\ref{japanese}〜\ref{nonpaper}で，はそれぞれ，
+日本語の論文形式の原稿，
+英語の原稿，
+論文以外の形式の原稿に書式と固有の注意点について述べます．
+
+\ref{sec:generalnote} は，句読点，脚注，相互参照，拡張マクロについ
+ての注意点です．
+%句読点と相互参照は特に
+\ref{sec:figtab}は図表の注意で，\textsc{PostScript}ファイルの取り
+込みに関する規定などを述べます．
+\ref{sec:equation}は数式に関する注意です．\ltt{amsmath}を用いる場
+合は特に注意してください．
+\ref{sec:bib}は参考文献に関する注意点で，
+最後の\ref{submit}は，提出するファイルに関して述べます．
+
+\section{日本語の論文形式の原稿}\label{japanese}
+
+\ltt{jsaiart.cls} を使用し，オプションとして（\verb|[]|内）下記の
+ものを指定します．指定がなければ \ltt{originalpaper}になります．
+\medskip
+
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+\hline
+\noalign{\vskip1mm}
+\tt{originalpaper}   & 原著論文（Original Paper）\\
+\tt{exploratorypaper}& 萌芽論文（Exploratory Research Paper）\\
+\tt{shortpaper}      & 速報論文（Short Paper）\\
+\tt{specialpaper}    & 特集論文（Special Paper）\\
+\tt{invitedpaper}    & 招待論文（Invited Paper）\\
+\tt{Specialissue}    & 特集（Special Issue）\\
+\tt{specialissue}    & 小特集（Special Issue）\\
+\tt{interimreport}   & 報告（An Interim Report）\\
+\tt{surveypaper}     & 解説（Survey Paper）\\
+\tt{aimap}           & AIマップ（AI map）\\
+
+\noalign{\vskip1mm}
+\hline
+\end{tabular}
+\end{center}
+\medskip
+\noindent
+例えば，原著論文であれば次のようになります．
+\begin{verbfbox}
+\documentclass[originalpaper]{jsaiart}
+\end{verbfbox}
+\noindent
+これらのオプションと共に \ltt{blindreview} も指定すると，
+\begin{verbfbox}
+\documentclass[blindreview,Specialissue]{jsaiart}
+\end{verbfbox}
+\noindent
+著者名などを伏せた査読用の原稿が出力されます．
+
+\subsection{原稿の書き方}
+
+\ref{fig:原稿構成}に原稿の全体構成を示します．
+テンプレートファイル \ltt{template-j.tex} が用意してありますの
+で，これを編集して原稿を作成してください．
+
+\begin{figure}[p]
+\begin{verbFbox}
+\documentclass[originalpaper]{jsaiart}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{日本語タイトル}
+\etitle{英語タイトル}
+\author{%
+ \name{姓}{名}{ローマ字読み}
+ \affiliation{日本語所属名}{英語所属名}%
+                             {e-mail,URL}
+\and
+ \name{姓}{名}{ローマ字読み}
+ \affiliation{日本語所属名}{英語所属名}%
+                             {e-mail,URL}
+}
+
+\begin{keyword}
+keywords in English
+\end{keyword}
+
+\begin{summary}
+summary in English
+\end{summary}
+%\setcounter{page}{1}
+
+\begin{document}
+\maketitle
+\section{まえがき}
+%% 原稿の内容（省略）%%
+
+\begin{acknowledgment}
+%% 謝辞原稿の内容（省略）%%
+\end{acknowledgment}
+
+\begin{thebibliography}{??}
+\bibitem[]{}
+\bibitem[]{}
+\end{thebibliography}
+
+\appendix
+\section{付録}
+%% 付録原稿の内容（省略）%%
+
+\begin{biography}
+\profile{会員種別}{著者名}{略歴内容}
+\end{biography}
+
+\end{document}
+\end{verbFbox}
+\caption{原稿の構成}
+\label{fig:原稿構成}
+\end{figure}
+
+\subsubsection{\texttt{Vol}と\texttt{No}}\label{Vol}
+\ltt{Vol} には \verb/\Vol{15}/ のように巻数（1985年が第1巻）を指定します．
+\verb/\No/ は \verb/\No{1}/ のように号数を指定します．
+論文が採録されて，掲載号が通知されたのち正しい巻と号を指定します．
+よって，投稿時には指定しなくても問題ありません．
+
+\subsubsection{\texttt{SubNo}}
+論文番号を指定しますが，これは事務局が決定するため，指示がなければ
+何もしなくて結構です．
+
+\subsubsection{\texttt{jtitle}}
+日本語タイトルを書きます．
+タイトル中に改行（\verb|\\|）を指定すれば，タイトル中で改行できま
+すが，柱\footnote{ヘッダ．ページ上部のページ数などがある部分}
+では無視されます．長すぎて，柱に収まらない場合は，
+\begin{verbfbox}
+\jtitle[柱用タイトル]{タイトル}
+\end{verbfbox}
+\noindent
+のようにすれば，柱には\verb|[]|内のものが使われます．
+
+\subsubsection{\texttt{etitle}}
+英語タイトルを書きます．
+前置詞，接続詞，文中冠詞等を除き単語の先頭文字を大文字にします．
+
+\subsubsection{\texttt{jsubtitle}と\texttt{esubtitle}}
+サブタイトルがある場合は，これらを用いて指定します．
+\verb/\jsubtitle/ は日本語用，\verb/\esubtitle/ は英語用です．
+これらは柱には出力されません．
+
+\subsubsection{\texttt{author}，\texttt{name}，\texttt{affiliation}}
+
+著者のリストを，以下のように指定します．
+\begin{verbfbox}
+\author{%
+ \name{姓}{名}{ローマ字読み}
+ \affiliation{日所属}{英所属}{e-mail,URL}
+}
+\end{verbfbox}
+
+\bsl{name} の第1引数は著者の姓を，第2引数は名を指定します．
+第3引数は著者のローマ字名を指定します．
+また，名前が長い方は\verb/\name/の代わりに
+\verb/\longname/を使ってください．
+
+著者の所属などは \verb/\affiliation/ に
+指定します．
+第1引数は著者の日本語所属名を，第2引数は英語所属名を
+指定します．
+第3引数は著者のe-mailアドレスを指定し，ホームページがあれば，``,''に続けて
+そのあとにURLを記してください．URL中の``\~{}'' はそのまま（エスケープしな
+いで）書いて下さい．
+
+\subsubsection*{複数の著者の場合}
+
+複数の著者の場合は\verb|\and| を使用します．
+\begin{verbfbox}
+\author{%
+ \name{姓1}{名1}{ローマ字読み1}
+ \affiliation{日所属1}{英所属1}{e-mail,URL}
+\and
+ \name{姓2}{名2}{ローマ字読み2}
+ \sameaffiliation{e-mail,URL}
+\and
+ \longname{姓3}{名3}{ローマ字読み3}
+ \affiliation{日所属3}{英所属3}{e-mail,URL}
+\and
+ \longname{姓4}{名4}{ローマ字読み4}
+ \affiliation{日所属1}{英所属1}{e-mail,URL}
+}
+\end{verbfbox}
+\noindent
+同じ所属の著者が連続する場合は\verb/\affiliation/の代わりに
+\verb/\sameaffiliation/を利用して，メールアドレスとURLだけを記述して
+ください．上の例では，著者1と2は所属が同じため著者2の所属は
+\verb/\sameaffiliation/を利用します．
+ただし，同じ所属でも，連続していない場合は\verb/\affiliation/を用
+いています．
+著者4は著者1と所属が同じですが，間の著者3の所属が異なるため
+\verb/\affiliation/を利用します．
+
+著者が多い場合（4名以上）には，\verb/\author/の前で
+\verb/\manyauthor/を使いて，著者名の行間を詰めてください．
+
+\subsubsection{\texttt{keyword}}
+
+\ltt{keyword} 環境の中に 2〜5 語の英単語を，略語や固有名
+詞などの場合を除き小文字で列挙してください．
+
+\subsubsection{\texttt{summary}}
+要約は \ltt{summary} 環境の中に，
+ 「速報論文」は 200 ワード，それ以外は200〜500 ワード
+で英文で記述してください．
+
+\subsubsection{本文}
+
+要約までを書いたあとに，
+\begin{verbfbox}
+\begin{document}
+\maketitle
+\end{verbfbox}
+\noindent
+と指定してから，本文を記述します．
+
+\subsubsection{\texttt{acknowledgment}}
+
+謝辞があれば，\ltt{acknowledgment} 環境に記述します．
+
+\subsubsection{付録}
+
+付録がある場合は \verb/\appendix/ を用います．
+これ以降，\verb|\section|の番号は(A.1)，(A.2) $\cdots$ となります．
+
+\subsubsection{著者の紹介}\label{profile}
+
+著者の略歴は以下のように記述します．
+\begin{verbfbox}
+\begin{biography}
+\profile{m}{知能 太郎}
+{19xx年xx月XX大学工学部情報工学科卒業．原稿の内容（省略）}
+\end{biography}
+\end{verbfbox}
+\noindent
+第1引数には正会員，学生会員などの会員種別別を，
+下のように，\ltt{m}，\ltt{s}，\ltt{h}，\ltt{n}のいずれ
+かで指定します．
+\medskip
+
+\begin{center}
+\begin{small}
+\begin{tabular}{cll}
+\hline
+\noalign{\vskip1mm}
+指定する文字 & 日本語の場合 & \multicolumn{1}{c}{英語の場合} \\
+\noalign{\vskip1mm}
+\hline
+\noalign{\vskip1mm}
+\ltt{m} & 正会員   & Member \\
+\ltt{s} & 学生会員 & Student Member \\
+\ltt{h} & 名誉会員 & Honorary Member \\
+\ltt{n} & （なし） & （なし） \\
+\noalign{\vskip1mm}
+\hline
+\noalign{\vskip1mm}
+%%\multicolumn{3}{l}{\parbox[t]{20zw}{}}
+\end{tabular}
+\end{small}
+\end{center}
+\medskip
+
+第2引数は著者名ですが，姓と名の間は必ず半角のスペース \verb*| |で
+区切ります．第3引数の略歴は200字以内です．
+
+解説記事だけは，写真・略歴が前掲である場合には，\verb|\profile*|
+を用いて省略できます．
+\begin{verbfbox}
+\profile*{m}{知能 次郎}
+            {前掲（15巻1号，p.714）参照．}
+\end{verbfbox}
+
+\section{英語の原稿}\label{english}
+
+英文原稿の場合は，\verb|\documentclass|の
+オプション（\verb|[]|内）として \ltt{english} を指定します．
+英文の原著論文，萌芽論文，速報論文の場合は  \ltt{english} を
+先に指定します．査読用のオプション\verb|blindrevew|も同時に利用できます．
+
+日本語原稿との相違点は，日本語タイトル\verb|\jtitle| や
+\verb|\jsubtitle|を記述しないことと，日本語著者名が不要なため，次の
+ように\verb|\name|や\verb|\affiliatiton|の引数が減り，書式が変る点
+です．
+\begin{verbfbox}
+\author{%
+ \name{First Name}{Last Name}
+ \affiliatiton{英語所属名}{e-mail,URL}
+}
+\end{verbfbox}
+
+\section{論文形式以外の原稿}\label{nonpaper}
+
+\subsection{原稿の種類と\texttt{jsaiopt.cls}のオプション}
+
+\ltt{jsaiart.cls}ではなく，\ltt{jsaiopt.cls}を用います．
+原稿の種類に応じて，\verb/\documentclass/ のオプションに以下のもの
+を指定します．
+\medskip
+
+\begin{center}
+\begin{small}
+\begin{tabular}{@{}l@{\ }l@{\ }l@{}}
+\hline
+\noalign{\vskip1mm}
+タイプ別 & オプション & 原稿の種類 \\
+\noalign{\vskip1mm}
+\hline
+\noalign{\vskip1mm}
+巻頭言など & \ltt{commentary}   & 巻頭言 \\
+           & \ltt{foreword}     & 特集「……」にあたって \\
+           & \ltt{essay}            & 随想 \\\hline
+巻末掲載物 & \ltt{laboratoryreport} & 研究室紹介 \\
+           & \ltt{eventreport}      & イベントだより \\
+           & \ltt{conferencereport} & 会議報告 \\
+           & \ltt{glossary}         & 用語解説 \\
+           & \ltt{bookreview}       & 書評 \\
+           & \ltt{paperview}        & 文献紹介 \\
+           & \ltt{calendar}         & カレンダー \\
+\noalign{\vskip1mm}
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\medskip
+
+\subsection{巻頭言などの書式}
+
+「巻頭言」「特集『……』にあたって」「随想」の三つのタイトルには
+\verb/\jtitle/ を使いますが，
+\begin{verbfbox}
+\author{\commentator{}{}}
+\end{verbfbox}
+のように記述する点が論文と異なります．
+なお姓と名は半角スペース（\verb*| |）で区切ってください．
+
+随想では，タイトルは柱にも出力されます．
+
+各書式の詳細は\ref{apdx:巻頭言}にまとめました．
+
+\subsection{巻末掲載物の書式}
+
+「研究所紹介」の研究所名，「会議報告」の会議名，
+「用語解説」のタイトルなどを \verb|\jtitle{}| で指定します．
+
+「書評」と「文献紹介」は \verb|\bookfinfo{}| に書籍のタイトル，出版社，
+発行年を指定してください．
+\begin{verbfbox}
+\bookinfo{Knuth, D.E.: {\it The \TeX book}, 
+          Addison-Wesley (1994)}
+\end{verbfbox}
+\noindent
+これは，\bsl{begin\{document\}}より前に書いてください．
+
+末尾に著者名がある原稿は
+\begin{verbfbox}
+\author{\commentator{姓 名}{所属名}}
+\end{verbfbox}
+とすれば，1行なら対応したマクロが用意してあります．
+姓と名は半角スペースで区切ってください．
+
+各書式の詳細は\ref{apdx:巻末掲載物}にまとめました．
+
+\subsection{「カレンダー」用のマクロ}
+
+\verb/\FromTo/ にはカレンダーの範囲をそれぞれ，プリアンブルで指定します．
+見出しのライン上の右横に出力されます．
+
+\begin{verbfbox}
+\FromTo{1996年11月}{1997年11月}
+\end{verbfbox}
+
+\ltt{Calendar} 環境の書式は以下のとおりです．
+
+\begin{verbfbox}
+\begin{Calendar}{会議などの名称}
+ \Date{開催日付}
+ \Location{開催場所}
+ \Contact{連絡先}
+ \Note{注意書き}
+\end{Calendar}
+\end{verbfbox}
+\ltt{Calendar} 内で改行する場合は，\verb/\hfil\break/ を使い，
+\verb/\par/ および空行は使用しないでください．
+
+\section{原稿全般に関する注意点}\label{sec:generalnote}
+\subsection{句読点}
+
+日本語の句読点はカンマ（\makebox[1zw][c]{\hbox{，}}）と
+ピリオド（\makebox[1zw][c]{\hbox{．}}）を使用し，
+``\makebox[1zw][c]{\hbox{、}}'' や ``\makebox[1zw][c]{\hbox{。}}''は
+使用しないでください．
+また，数式や英文中でのみで半角の句読点を用い，日本語文中では全角の句
+読点を使用してください．
+
+2倍ダッシュ（ダーシ）の``\ddash''は，英文中を除き，日本語の中では 
+\verb/\ddash/ を用いて下さい．
+
+\subsection{脚注}\label{sec:footnote}
+
+
+脚注マークは，カウンターが進むごとに $\ast$1，$\ast$2，$\ast$3 となります．
+
+
+\verb|\section{}| や \verb|\subsection{}| などの中では脚注は利用で
+きません．
+
+タイトル中で脚注をつける場合は，以下のように手動でカウンタの値を調節
+する必要があります．
+\begin{verbfbox}
+ \affiliation{（株）人工知能研究所\footnotemark[1]}%
+     {Artificial intelligence Research Inc.}%
+     {email@ai-gakkai.or.jp}
+\end{verbfbox}
+のように\bsl{footnotemark[}$\langle$脚注番号$\rangle$\texttt{]}
+で番号を付けて
+\begin{verbfbox}
+\begin{document}
+\maketitle
+\footnotetext[1]{現職：人工知能大学}
+\setcounter{footnote}{1}
+\end{verbfbox}
+内容は
+\bsl{footnotetext[}$\langle$脚注番号$\rangle$\texttt{]\{}
+$\langle$脚注の内容$\rangle$\texttt{\}}
+によって記述します．そのあとにカウンタ\ltt{footnote}をタイト
+ル中で用いた最後の脚注番号にします．これらは\bsl{maketitle}の直後
+に記述します．
+
+\subsection{相互参照}
+
+図表の相互参照は図表環境内に例えば \verb/\ref{fig:1}/ などと指定すれば，
+``図1''（英語では Figure~1），``表1''（英語では Table~1）と
+出力されます．
+
+式に，\verb|\label{eq:01}| のようにしてラベルをつけていれば，
+\verb|\ref{eq:01}| によって参照できます．
+参照箇所では，明示的に括弧をつけなくても，(1)などのように出力され
+ます．
+ただし，\ltt{amsmath}スタイルを利用する場合は注意点がありますので，
+\ref{amstex}を参照してください．
+
+\def\DOT{\hbox to .5zw{\hss {\rm ・}\hss}}%
+同様に，sectionの番号を参照すると``1章''(英語では ``Chapter~1'')，
+subsectionは``1\DOT{}1節''(英語では ``Section~1\DOT{}1'')，subsubsectionは
+``1\DOT 1\DOT 1節''(英語では``Section~1\DOT 1\DOT 1'') 
+のように\verb|\ref|だけで``章''や``節''が補われます．
+
+%\def\DOT{\hbox to .5zw{\hss {\rm ・}\hss}}%
+%同様に，sectionの番号を参照すると``1章''(英語では ``Chapter~1'')，
+%subsectionは``1\DOT{}1節''(英語では ``Section~1\DOT{}1'')，subsubsectionは
+%``\S~1''(英語でも``\S~1'') のように\verb|\ref|だけで
+%『章』や『節』が補われます．
+%なお，subsubsectionの場合は``\S~1''としか表示されませんから、
+%説明の箇所によってsubsectionが何を指しているかわからなくなることがあります．
+%そうした場合には，例えば，「\ref{bib}\ref{on-bib}」とか
+%「\ref{on-bib}（\ref{bib}）」のように補って説明してください。
+
+その他の参照は，番号のみを出力しますから，出力結果にあわせるように
+してください．
+
+\subsection{拡張マクロ}
+
+次の拡張マクロがあります．
+\medskip
+
+\begin{center}
+\begin{small}
+\begin{tabular}{@{}ll@{}}
+\hline
+\noalign{\vskip1mm}
+\verb/\QED/ & 「証明終」の（$\Box$）\\
+\verb|\MARU{1}$\sim$\MARU{5}| & \MARU{1}$\sim$\MARU{5} \\
+\verb|\kintou{4zw}{時間}| & 均等割り付け：\kintou{3zw}{時間} \\
+\verb|\ruby{閾}{しきい}値| & ルビ：\ruby{閾}{しきい}値 \\
+\verb/\onelineskip/ & 1行アキ \\
+\verb/\halflineskip/ & 半行アキ \\
+\noalign{\vskip1mm}
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\smallskip
+通常の\LaTeX{}では，\verb|\,| や \verb|\;| は数式中で利用できませ
+んが，本スタイルファイルでは数式以外でも使えます．
+
+\verb|\section{}| や \verb|\subsection{}| などの中に
+\verb|\verb| を用いて \verb|\ % $ # _| などが使えませんが，
+以下の回避方法があります．
+\medskip
+
+\begin{verbfbox}
+\def\tbs{\ltt{\char'134}} % \
+\section{コマンド \texttt{\tbs \char} について}
+\end{verbfbox}
+
+\section{図表}\label{sec:figtab}
+
+図表の出力位置を指定するオプションは，\ltt{h} は使わず，
+\ltt{t}，\ltt{b}，\ltt{tbp} などを指定して，ページの上端か下端に配
+置してください．
+
+表のキャプションは表の上に，図のキャプションは図の下に書いてください．
+
+キャプションの幅を図表の幅に合わせたい場合には，
+幅を指定してキャプションを\verb|\capwidth|を使って，
+その幅で折り返すこともできます．
+\begin{verbfbox}
+\begin{figure*}[t]
+\begin{center}
+\epsfile{file=xxxx.eps,width=90mm}
+\end{center}
+\capwidth=90mm %
+\caption{図の説明文 ... }
+\end{figure*}
+\end{verbfbox}
+
+取り込みが可能な図の形式はepsファイルのみです．
+取り込みには\ltt{graphics}パッケージ，または，\ltt{eclepsf.sty}，
+\ltt{epsbox.sty}，\ltt{epsf.sty}
+スタイルファイルのいずれかを用いてください．
+これらの利用方法については，\cite{latex-graphics-companion}や
+\cite{中野}を参照してください．
+
+\textsc{PostScript}ファイル中では以下の
+PSフォントのみを用いてください．
+\begin{verbfbox}
+Courier, Courier-Bold, 
+    Courier-Oblique, Courier-BoldOblique,
+Helvetica, Helvetica-Bold, 
+    Helvetica-Oblique, Helvetica-BoldOblique, 
+Times, Times-Bold, Times-Italic, Times-BoldItalic
+Symbol, ZapfDingbats,
+中ゴシックBBB, リュウミンライトKL
+\end{verbfbox}
+その他のPS，TrueTpye，OpenTypeのフォントを利用さ
+れる場合は必ずアウトライン化してください．
+
+図や写真の取り込みついてのその他の注意点です．
+\begin{itemize}
+\item 線画は，文字の大きさや線の太さが，本文の文字の大きさと
+バランスが取れるような大きさで取り込んでください．
+\item 写真およびスクリーンを多用した編状のパターンは著者のプリンタ
+と印刷会社の機器の解像度の違いなどによって，黒くつぶれたり，
+意図しない線が見える場合があります．
+%\item 必ず，オリジナルのハードコピー（写真プリント，
+%著者のプリンタで2倍程度に拡大出力した図）を添付してください．
+%添付されたものが印刷に不適切な場合は，事務局から著者に対し，
+%再度適切なものの提出を要求する場合もあります．
+\end{itemize}
+
+\section{数式}\label{sec:equation}
+
+\subsection{独立行の数式}
+
+独立行の数式では \ltt{\$\$} ではなく，\bsl{[} や \ltt{equation}環
+境を用いてください．
+
+\StyleFile{}には \ltt{fleqn.sty} を組み込んでおり，左寄せで数式が
+出力されます．
+
+数式は文書の幅をはみ出しやすいので，特に注意してください．
+
+\subsection{アメリカ数学学会(AMS)のスタイルファイルの使用}
+\label{amstex}
+
+\ltt{amsfonts}スタイルなどを用いて利用できる以下のフォントは利用可
+能です．
+\begin{verbfbox}
+msam5, msam6, msam7, msam8, msam9, msam10
+msbm5, msbm6, msbm7, msbm8, msbm9, msbm10
+\end{verbfbox}
+
+\ltt{amsmath}スタイルファイルを用いる場合は
+\begin{itemize}
+\item \bsl{documentclass}のオプションに\ltt{fleqn}を指定してください
+\item 数式番号の参照は，\ltt{amsmath}の
+\bsl{eqref}を用いてください
+\end{itemize}
+
+その他，\ltt{amsmath}スタイルファイルの詳細は，
+\cite{latex-companion}や\cite{中野}を参照してください．
+
+\subsection{$\backslash$\texttt{newtheorem}について}
+
+\verb/\newtheorem/ は，本誌の体裁に従って調整してあります．
+日本語モード，英語モードそれぞれに，\ref{tbl:newtheorem} のような
+ものが定義されています．
+
+\begin{table}
+\caption{$\backslash$\texttt{newtheorem}の見出し}
+\label{tbl:newtheorem}
+\resizebox{8cm}{!}{%
+\begin{tabular}{ll}
+\hline
+\bsl{newtheorem} の宣言 & 出力例 \\
+\hline
+\bsl{newtheorem\{definition\}\{定義\}} & \bf 【定義1】 \\
+\bsl{newtheorem\{definition\}\{Definition\}} & \bf [Definition 1] \\
+\hline
+\bsl{newtheorem\{theorem\}\{定理\}} & \bf ［定理1］ \\
+\bsl{newtheorem\{theorem\}\{Theorem\}} & \bf [Theorem 1] \\
+\hline
+\bsl{newtheorem\{proof\}\{証明\}} & 《証明》$^{*}$ \\
+\bsl{newtheorem\{proof\}\{Proof\}} & \bf \hbox{$\LL$}Proof\kern.25ex \hbox{$\GG$}$^{*}$ \\
+\hline
+\bsl{newtheorem\{lemma\}\{補題\}} & \bf ［補題1］ \\
+\bsl{newtheorem\{lemma\}\{Lemma\}} & \bf [Lemma 1] \\
+\hline
+\bsl{newtheorem\{corollary\}\{系\}} & \bf （系1） \\
+\bsl{newtheorem\{corollary\}\{Corollary\}} & \bf (Corollary 1) \\
+\hline
+\bsl{newtheorem\{example\}\{例\}} & 〔例1〕 \\
+\bsl{newtheorem\{example\}\{Example\}} & \bf [Example 1] \\
+\hline
+\bsl{newtheorem\{proposition\}\{命題\}} & 〈命題1〉 \\
+\bsl{newtheorem\{proposition\}\{Proposition\}} & 
+\bf \hbox{$\langle$}Proposition 1\hbox{$\rangle$} \\
+\hline
+\bsl{newtheorem\{assumption\}\{仮定\}} & \bf ［仮定1］ \\
+\bsl{newtheorem\{assumption\}\{Assumption\}} & \bf [Assumption 1] \\
+\hline
+\multicolumn{2}{l}{$^{*}$ 番号が付きません．}
+\end{tabular}}
+\end{table}
+
+\begin{figure}[t]
+\begin{verbFbox}
+@Article{jml:86,
+  author = "J. R. Quinlan",
+  title = "Induction of Decision Trees",
+  journal = "Machine Learning",
+  year = 1986,
+  volume = 1,
+  pages = "81--106"
+}
+
+@InProceedings{icml:96,
+  author = "Y. Freund and R. E. Schapire",
+  title = "Experiments with
+           a New Boosting Algorithm",
+  booktitle = "Proc. of the 13th 
+               International Conference
+               on Machine Learning",
+  year = 1996,
+  pages = "148--156"
+}
+
+@Book{michell:97,
+  author = "T. M. Michell",
+  title = "Machine Learning",
+  publisher = "The McGraw-Hill Companies",
+  year = 1997
+}
+
+@Article{jjsai:92,
+  author = "山西 建司 and 韓 太舜",
+  title = "{MDL}入門:情報理論の立場から",
+  yomi = "Yamanishi and Han",
+  journal = "人工知能学会誌",
+  year = 1992,
+  volume = 7,
+  number = 3,
+  pages = "427--434",
+}
+\end{verbFbox}
+\caption{\ltt{.bib}ファイルの例}
+\label{fig:bibsample}
+\end{figure}
+
+\section{参考文献}\label{sec:bib}
+
+\subsection{\BibTeX{}を使わない場合}\label{not-bib}
+
+本誌の \verb/\bibitem/ の記述は以下のとおりです．
+\begin{verbfbox}
+\bibitem[Quinlan 86]{jml:86} J. R. Quinlan, ...
+\end{verbfbox}
+
+掲載順は，和文・英文の文献を含めアルファベット順です．
+
+引用は[Quinlan 86]のように著者名と年の間に空白を入れてください．
+
+文献を複数引用する場合は[Quinlan 86][Freund 96]とせず，[Quinlan
+86, Freund 96]のようにまとめてください．
+
+\subsection{\BibTeX{}を使う場合}\label{on-bib}
+
+\BibTeX{}用のスタイルファイルを使う場合は
+一緒に配布されている専用のスタイルファイル\ltt{jsai.bst}
+\footnote{\label{footnote}
+\ltt{jsai.bst} は松井正一氏（(財)電力中央研究所 情報システム部）
+作成のものに手を加えて作りました．バージョンは\BibTeX{}が0.99c，
+\JBibTeX{}が0.30です．}
+を使ってください．
+
+使い方は，参考文献の所定の箇所に
+\begin{verbfbox}
+\bibliography{btxsample} %% .bibファイル名
+\bibliographystyle{jsai} %% jsai.bst スタイルの指定
+\end{verbfbox}
+と指定します．
+
+データベース\ltt{.bib}ファイルの例を\ref{fig:bibsample}に示しま
+す．
+
+詳しくは\BibTeX{}や，\JBibTeX{}のドキュメント\cite{松井,btxhak}を
+参照してください．
+
+\section{ファイルの提出について}\label{submit}
+
+原稿およびファイルの提出については「原稿執筆案内」を参照してください．
+ここではファイルの提出の際の注意点を挙げます．
+
+\begin{itemize}
+\item
+原稿の \TeX{} ファイルは，メインのファイルにインクルードまたは
+インプットするのではなく，必ず1本にまとめてください．
+\item
+著者独自のマクロなど，コンパイルに必要なソースは必ず添付してください．
+\item
+なお，使用されるパッケージで，一般サイトにないものを使うときは
+必ず原稿と共に使ったスタイルファイルを添付してください．
+ただし，最終組版の段階でそれらパッケージが使えなくなることもあります．
+特殊なパッケージを使用される場合は十分な配慮をお願い致します．
+\item
+図の ps および eps ファイル，\BibTeX{}の生成する bbl ファイル
+も必ず添付してください．
+\item
+原稿全体をフォーマットしたのちPDFファイルに変換したもの（変換で
+きなければ，\textsc{PostScript}ファイルに変換したもの）を添付して
+ください．
+\end{itemize}
+
+\bibliography{btxsample}
+\bibliographystyle{jsai}
+
+\appendix
+
+\section{\LaTeX{}2.09版の利用について}
+\label{latex209}
+
+人工知能学会のスタイルファイルは\LaTeX209版もあります．
+アスキー版のバージョン2.09$<$24 May 1989$>$以降，もしくは
+NTT版\JTeX{} のVersion 1.12 以降を対象にしています．
+ただし，
+同じ文書を\LaTeX{}版で組版した場合と\LaTeXe{}版で組版した場合とでは
+完全には同じ結果になりません．
+
+\LaTeX209版用のファイルは以下のとおりです．
+\begin{center}
+{\small
+\begin{tabular}{ll}
+\hline
+\ltt{jsai.sty}  & スタイルファイル\\\hline
+\ltt{template209-j} & 日本語論文用テンプレート\\\hline
+\ltt{template209-e} & 英語論文用テンプレート\\\hline
+\ltt{template209-o} & 論文以外のテンプレート\\\hline   
+\end{tabular}
+}
+\end{center}
+
+\LaTeXe{}では \ltt{jsaiart.cls} や \ltt{jsaiopt.cls} などのクラス
+ファイルを用いましたが，
+\LaTeX{}では
+\smallskip\hrule\smallskip
+{\small
+\begin{verbatim}
+\documentstyle[originalpaper]{jsai}
+\end{verbatim}}
+\smallskip\hrule\smallskip
+
+\noindent
+のように，\verb|documenstyle| と\ltt{jsai.sty} を用います．
+他は，ほぼ\LaTeXe{}版と同じです．
+
+\section{\texttt{profile-2e.sty}について}
+
+\ltt{profile-2e.sty} は，最終版の作成のため，事務局で用いるもので，
+著者には関係ありません．ですが，簡単に説明しておきます．
+これは，著者紹介に写真を取り込むためのスタイルファイルで，
+\bsl{usepackage} によって \ltt{graphicx} パッケージと共に用いると，
+\bsl{profile} に写真を取り込む引数が追加されます．
+\begin{verbfbox}
+\begin{biography}
+\profile{m}{知能 太郎}{著者の略歴}{portrait}
+\end{biography}
+\end{verbfbox}
+このように記述すると， \ltt{portrait.eps}（拡張子は小文字）という
+PSファイルが取り込まれます．すなわち，\ltt{portrait}を写真のファイ
+ル名に合わせて変更します．写真の比率は縦：横が $6:5$ です．
+
+\newpage
+\section{巻頭言などの書式}\label{apdx:巻頭言}
+
+\subsection*{※ 巻頭言}
+\begin{verbfbox}
+\documentclass[commentary]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{タイトル}
+\author{
+ \commentator{著者名}{日本語所属名}
+}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ 特集「……」にあたって}
+
+\begin{verbfbox}
+\documentclass[foreword]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{タイトル}
+\author{
+ \commentator{著者名}{日本語所属名}
+}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ 随想}
+
+\begin{verbfbox}
+\documentclass[essay]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{タイトル}
+%\jtitle[柱用日本語タイトル]{日本語タイトル}
+\author{
+ \commentator{著者名}{日本語所属名}
+}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\section{巻末掲載物の書式}\label{apdx:巻末掲載物}
+
+
+\subsection*{※ 研究所紹介}
+
+\begin{verbfbox}
+\documentclass[laboratoryreport]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{紹介する研究所名}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ イベントだより}
+
+{\small
+\begin{verbfbox}
+\documentclass[eventreport]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{タイトル}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ 会議報告}
+
+{\small
+\begin{verbfbox}
+\documentclass[conferencereport]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{タイトル}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ 用語解説}
+
+\begin{verbfbox}
+\documentclass[glossary]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\jtitle{タイトル}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+%\end{Calendar}
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ 書評}
+
+{\small
+\begin{verbfbox}
+\documentclass[bookreview]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\bookfinfo{タイトル，出版社，発行年}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ 文献紹介}
+
+\begin{verbfbox}
+\documentclass[paperview]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\bookfinfo{タイトル，出版社，発行年}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\end{document}
+\end{verbfbox}
+
+\subsection*{※ カレンダー}
+
+\begin{verbfbox}
+\documentclass[calendar]{jsaiopt}
+\Vol{16}  %%論文誌の巻数 
+\No{6}    %%論文誌の号数  
+\SubNo{c} %%論文番号
+\FromTo{年月日}{年月日}
+%\setcounter{page}{1}
+\begin{document}
+\maketitle
+%% 原稿の内容（省略）%%
+\begin{Calendar}{会議などの名称}
+ \Date{開催日付}
+ \Location{開催場所}
+ \Contact{連絡先}
+ \Note{注意書き}
+\end{Calendar}
+\begin{Calendar}{会議などの名称}
+ \Date{開催日付}
+ \Location{開催場所}
+ \Contact{連絡先}
+ \Note{注意書き}
+\end{Calendar}
+\end{document}
+\end{verbfbox}
+
+\end{document}
