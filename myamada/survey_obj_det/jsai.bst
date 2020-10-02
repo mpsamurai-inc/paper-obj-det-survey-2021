@@ -1,17 +1,17 @@
 %%
-%% Ç±ÇÃÉXÉ^ÉCÉãÉtÉ@ÉCÉãÇÕÅCêlçHímî\äwâÔî≠çsÇÃêlçHímî\äwâÔéèÇÃÇΩÇﬂÇÃÉXÉ^ÉCÉãÉt
-%% É@ÉCÉãÇ≈Ç∑ÅD
+%% $B$3$N%9%?%$%k%U%!%$%k$O!$?M9)CNG=3X2qH/9T$N?M9)CNG=3X2q;o$N$?$a$N%9%?%$%k%U(B
+%% $B%!%$%k$G$9!%(B
 %%
-%% jsai.bstÇÕìdóÕíÜâõå§ãÜèäÇÃèºà‰ê≥àÍéÅÇ™êªçÏÇµÇΩjalpha.bst ÇÇ‡Ç∆Ç…ÅCÇªÇÃëº
-%% ÇÃÉXÉ^ÉCÉãÉtÉ@ÉCÉãÇÕÅiäîÅjÉEÉãÉXÇÃç≤ì°äÓè∫éÅÇ™êªçÏÇµÇΩÉoÅ[ÉWÉáÉì1.1ÇÇ‡Ç∆
-%% Ç…ÅiäîÅjZoo.COMÇ∆êlçHímî\äwâÔÇ™â¸ïœÇµÇΩÇ‡ÇÃÇ≈Ç∑ÅDèºà‰éÅï¿Ç—Ç…ç≤ì°éÅÇ…ÇÕ
-%% ñ{ÉXÉ^ÉCÉãÉtÉ@ÉCÉãÇÃégópÇ…ÇÊÇËê∂Ç∂ÇΩñ‚ëËÇ…ëŒÇ∑ÇÈê”îCÇÕàÍêÿÇ†ÇËÇ‹ÇπÇÒÅD
+%% jsai.bst$B$OEENOCf1{8&5f=j$N>>0f@50l;a$,@=:n$7$?(Bjalpha.bst $B$r$b$H$K!$$=$NB>(B
+%% $B$N%9%?%$%k%U%!%$%k$O!J3t!K%&%k%9$N:4F#4p><;a$,@=:n$7$?%P!<%8%g%s(B1.1$B$r$b$H(B
+%% $B$K!J3t!K(BZoo.COM$B$H?M9)CNG=3X2q$,2~JQ$7$?$b$N$G$9!%>>0f;aJB$S$K:4F#;a$K$O(B
+%% $BK\%9%?%$%k%U%!%$%k$N;HMQ$K$h$j@8$8$?LdBj$KBP$9$k@UG$$O0l@Z$"$j$^$;$s!%(B
 %%
-%% Ç±ÇÃÉXÉ^ÉCÉãÉtÉ@ÉCÉãÇÃíòçÏå†ÇÕÅCjsai.bst ÇèúÇ´ÅCêlçHímî\äwâÔÇ…Ç†ÇËÇ‹Ç∑ÅD
-%% jsai.bst ÇÃíòçÏå†ÇÕÅCÉIÉäÉWÉiÉãïîï™Ç…Ç¬Ç¢ÇƒÇÕèºà‰éÅÇ…ÅCâ¸ïœïîï™Ç…Ç¬Ç¢ÇƒÇÕ
-%% êlçHímî\äwâÔÇ…ÅCÇªÇÍÇºÇÍÇ†ÇËÇ‹Ç∑ÅD
+%% $B$3$N%9%?%$%k%U%!%$%k$NCx:n8"$O!$(Bjsai.bst $B$r=|$-!$?M9)CNG=3X2q$K$"$j$^$9!%(B
+%% jsai.bst $B$NCx:n8"$O!$%*%j%8%J%kItJ,$K$D$$$F$O>>0f;a$K!$2~JQItJ,$K$D$$$F$O(B
+%% $B?M9)CNG=3X2q$K!$$=$l$>$l$"$j$^$9!%(B
 %%
-%%% à»â∫ÇÕå≥Ç∆Ç»Ç¡ÇΩjsai.bstÇÃèºà‰éÅÇ…ÇÊÇÈï\é¶Ç≈Ç∑
+%%% $B0J2<$O85$H$J$C$?(Bjsai.bst$B$N>>0f;a$K$h$kI=<($G$9(B
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% version 0.30 for JBibTeX versions 0.30 or later, LaTeX version 2.09.
 	% Copyright (C) 1990, all rights reserved.
@@ -29,7 +29,7 @@
 	%
 	% Please notify Shouichi MATSUI(matsui@denken.or.jp) of any bugs in
 	% these standard styles or in this documentation file.
-	% èºà‰ ê≥àÍ  (ç‡) ìdóÕíÜâõå§ãÜèäÅ@èÓïÒÉVÉXÉeÉÄïî
+	% $B>>0f(B $B@50l(B  ($B:b(B) $BEENOCf1{8&5f=j!!>pJs%7%9%F%`It(B
 	% jalpha.bst, tipsj.bst and jorsj.bst, September 10 1999 (SMD)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -109,7 +109,7 @@ FUNCTION {output.nonnull}
 		{ author field.or.null is.kanji.str$ 
 		  editor field.or.null is.kanji.str$ or
 		  organization field.or.null is.kanji.str$ or
-		    {"ÅF" * write$}
+		    {"$B!'(B" * write$}
 		    {": " * write$}
 		  if$
 		}
@@ -230,7 +230,7 @@ INTEGERS { nameptr namesleft numnames }
 %	    {", " * t * }
 %	    { t "others" = t "others,~" = or
 % 		{ s is.kanji.str$
-% 			{"ëº" * }
+% 			{"$BB>(B" * }
 % 			{", et~al." * }
 % 		  if$
 % 		}
@@ -265,7 +265,7 @@ FUNCTION {format.names}
 
         t empty$
  	      { s nameptr "{ll}" format.name$ 't :=
-	        t " Ç…ÇÕÅCê©Ç∆ñºÇÃä‘Ç…ãÛîíÇ™Ç»Ç¢ÇÊÅH in " * cite$ * warning$
+	        t " $B$K$O!$@+$HL>$N4V$K6uGr$,$J$$$h!)(B in " * cite$ * warning$
           }
  	      'skip$
  	    if$
@@ -278,7 +278,7 @@ FUNCTION {format.names}
             {", " * t * }
             { t "others,~" =
    	    { s is.kanji.str$
-        	  {"~~ëº" * }
+        	  {"~~$BB>(B" * }
       	          {", et~al." * }
       	if$
       	}
@@ -314,10 +314,10 @@ FUNCTION {format.editors}
     { editor format.names
       editor num.names$ #1 >
  	{ editor is.kanji.str$
- 		{"Åiï“Åj" * } {" eds." * } if$
+ 		{"$B!JJT!K(B" * } {" eds." * } if$
  	}
  	{ editor is.kanji.str$
- 		{"Åiï“Åj" *} {" ed." * } if$
+ 		{"$B!JJT!K(B" *} {" ed." * } if$
  	}
       if$
     }
@@ -390,7 +390,7 @@ FUNCTION {format.bvolume}
     { volume is.kanji.str$
 	{ volume }
 	{ is.kanji.entry
-	    {"ëÊ" volume * "ä™" *}
+	    {"$BBh(B" volume * "$B4,(B" *}
 	    {"Vol." volume tie.or.space.connect}
 	  if$
 	}
@@ -439,7 +439,7 @@ FUNCTION {format.edition}
     { edition is.kanji.str$
 	{ edition }
         { is.kanji.entry
-	    {"ëÊ" edition * "î≈" *}
+	    {"$BBh(B" edition * "$BHG(B" *}
 	    { output.state mid.sentence =
 	      { edition "l" change.case$ " edition" * }
 	      { edition "t" change.case$ " edition" * }
@@ -522,7 +522,7 @@ FUNCTION {format.chapter.pages}
 	{ chapter is.kanji.str$
 	    { "" }
 	    { is.kanji.entry
-		{"èÕ"}
+		{"$B>O(B"}
 		{"chapter"}
 	      if$
 	    }
@@ -531,7 +531,7 @@ FUNCTION {format.chapter.pages}
 	{ type "l" change.case$ }
       if$
       chapter is.kanji.str$ not is.kanji.entry and
-          {"ëÊ" chapter * swap$ *}
+          {"$BBh(B" chapter * swap$ *}
           { chapter is.kanji.str$
 		{chapter *}
 		{chapter tie.or.space.connect}
@@ -625,13 +625,13 @@ FUNCTION {format.crossref.editor}
   editor num.names$ duplicate$
   #2 >
     { editor is.kanji.str$
-	  {pop$ "ëº" *} {pop$ ", et~al." * } if$
+	  {pop$ "$BB>(B" *} {pop$ ", et~al." * } if$
     }
     { #2 <
 	'skip$
 	{ editor #2 "{ff }{vv }{ll}{ jj}" format.name$ "others" =
  	    { editor is.kanji.str$
- 		{"ëº" *} {", et~al." * } if$
+ 		{"$BB>(B" *} {", et~al." * } if$
  	    }
  	    { editor is.kanji.str$
 		{
@@ -661,7 +661,7 @@ FUNCTION {format.book.crossref}
     { volume is.kanji.str$
 	{ volume }
 	{ is.kanji.entry
-	    {"ëÊ" volume * "ä™" *}
+	    {"$BBh(B" volume * "$B4,(B" *}
 	    {"Vol." volume tie.or.space.connect " of " *  }
 	  if$
 	}
@@ -1057,9 +1057,9 @@ MACRO {toms} {"ACM Trans. Math. Softw."}
 MACRO {toois} {"ACM Trans. Office Inf. Syst."}
 MACRO {toplas} {"ACM Trans. Prog. Lang. Syst."}
 MACRO {tcs} {"Theoretical Comput. Sci."}
-MACRO {tieice} {"êMäwò_"}
-MACRO {tipsj}  {"èÓïÒèàóùäwâÔò_ï∂éè"}
-MACRO {jsai} {"êlçHímî\äwâÔéè"}
+MACRO {tieice} {"$B?.3XO@(B"}
+MACRO {tipsj}  {"$B>pJs=hM}3X2qO@J8;o(B"}
+MACRO {jsai} {"$B?M9)CNG=3X2q;o(B"}
 MACRO {jipsj}  {"J.~Info. Proc. Soc. of Japan"}
 MACRO {jorsj}  {"Journal of the O. R. Society of Japan"}
 
@@ -1156,7 +1156,7 @@ FUNCTION {format.lab.names}
   s  is.kanji.str$
     { s #1 "{ff}" format.name$ duplicate$ empty$
 	{ pop$ s #1 "{ll}" format.name$ #4 text.prefix$
-	  s #1 "{ll}" format.name$ " Ç…ÇÕÅCê©Ç∆ñºÇÃä‘Ç…ãÛîíÇ™Ç»Ç¢ÇÊÅH in " *
+	  s #1 "{ll}" format.name$ " $B$K$O!$@+$HL>$N4V$K6uGr$,$J$$$h!)(B in " *
              cite$ * warning$
         }
 	'skip$
@@ -1232,7 +1232,7 @@ FUNCTION {format.lab.names.sort}
   s  is.kanji.str$
     { s #1 "{ff}" format.name$ duplicate$ empty$
 	{ pop$ s #1 "{ll}" format.name$ #4 text.prefix$
-	  s #1 "{ll}" format.name$ " Ç…ÇÕÅCê©Ç∆ñºÇÃä‘Ç…ãÛîíÇ™Ç»Ç¢ÇÊÅH in " *
+	  s #1 "{ll}" format.name$ " $B$K$O!$@+$HL>$N4V$K6uGr$,$J$$$h!)(B in " *
              cite$ * warning$
         }
 	'skip$
@@ -1385,7 +1385,7 @@ FUNCTION {sort.format.names}
       s nameptr "{vv{ } }{ll{ }}{  f{ }}{  jj{ }}" format.name$ 't :=
       nameptr numnames = t "others" = and
  	{ s is.kanji.str$
- 		{"ëº" * }
+ 		{"$BB>(B" * }
  		{"et~al." *}
 	  if$
  	}
