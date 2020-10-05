@@ -26,6 +26,11 @@
 % documentclass のオプションに fleqnを指定すること
 % 例: \documentclass[technicalpaper,fleqn]{jsaiart}
 
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{graphics}
+\usepackage{fancybox}
+\usepackage{comment}
+
 \Vol{12}
 \No{1}
 %\jtitle{物体検出のためのニューラルネットワークのサーベイ}
@@ -85,6 +90,29 @@
 \section{まえがき}
 引用の例:\cite{HHGHW19}によると，MS R-CNN は高性能である．
 \section{物体検出(Object detection)}
+
+\begin{figure}[p]
+    ああ．
+    %\begin{verbFbox}
+    %\documentclass[originalpaper]{jsaiart}
+    %\Vol{16}  %%論文誌の巻数 
+    %\end{verbFbox}
+    %\caption{原稿の構成}
+    %\label{fig:原稿構成}
+\end{figure}
+
+
+% これだと１段組になってしまう．
+\begin{figure*}[t]
+    \begin{center}
+        %\epsfile{file=boxDiagram.eps,width=90mm}
+        %\includegraphics[width=5cm,clip]{boxDiagram.eps}
+        \includegraphics[width=3cm,clip]{boxDiagram.eps}
+    \end{center}
+    %\capwidth=90mm %
+    \caption{ 図の説明文 ... }
+\end{figure*}
+
 \subsection{Two-stage検出器}
 \subsubsection{Faster R-CNN}
 \subsubsection{TFANet}
