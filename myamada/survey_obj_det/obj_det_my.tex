@@ -88,7 +88,7 @@
 
 ここにチートシートを出力する．
 \section{まえがき}
-引用の例:\cite{HHGHW19}によると，MS R-CNN は高性能である．
+★作成中．
 \section{物体検出(Object detection)}
 %\begin{figure}[t]
 %    \begin{center}
@@ -104,8 +104,7 @@
 \subsubsection{YOLOv4}
 \subsubsection{EfficientDet}
 \section{インスタンスセグメンテーション(Instance segmentation)}
-\subsection{MS R-CNN}
-★ここから
+\subsection{Mask Scoring R-CNN (MS R-CNN)}
 %\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
 \begin{figure}[b]
     \begin{center}
@@ -113,8 +112,25 @@
     \end{center}
     %\capwidth=90mm %
     \caption{ Mask Scoring R-CNN の構造．}
-%\end{figure*}
+    %\end{figure*}
+    \label{fig:archi_ms_rcnn}
 \end{figure}
+マスク品質(インスタンスマスクと正解マスクとのIoUとして定量化されるもの)を分類スコアと明示的に関連付けたモデルである\cite{HHGHW19}．MS R-CNN は，予測マスクの品質を学習するためのブロック(MaskIoU Head)を，Mask R-CNN\cite{HGDG17} に導入したモデルになっている(\ref{fig:archi_ms_rcnn})．MaskIoU Headはインスタンスの特徴量と対応する予測マスクを一緒に取り込み，それを元にMask IoU を回帰推定する．そして，推論時に予測MaskIoUを分類スコアに掛け算して補正する．
+\subsubsection{MS R-CNN の学習}
+学習サンプルとして RPN proposals を使う．
+proposal box と正解box との IoU が 0.5 以上の学習サンプルが必要となる．これは Mask R-CNN の Mask head の学習サンプルの場合と同じである．
+各学習サンプルに対する回帰目標を生成するために，まず目標クラスの予測マスクを取得し，予測マスクを閾値=0.5で2値化する．そして，2値化マスクと正解との MaskIoU を使う．
+MaskIoUを回帰するのには L2 損失を使い，損失重みは1にする．
+ネットワーク全体は end-to-end で学習する．
+\subsubsection{MS R-CNN の推論処理}
+MaskIoU Head は分類スコア(R-CNN head の出力)の調整に使う．推論の手順は次のようになる:
+\begin{enumerate}
+    \item R-CNN head が $N$個のbounding boxを出力する．
+    \item $N$個のbounding boxのうち，SoftNMS\cite{BSCD17}で上位$k$個のボックスを選択する．
+    \item 上位$k$個のボックスを Mask Head に入力し，$k$個のマルチクラスマスクを生成する（ここまでは標準的 Mask R-CNN の手順）．
+    \item これら$k$個のマスクを目標として MaskIoU Head に入力し，予測 MaskIoU を出力する．
+    \item 予測 MaskIoU を，分類スコアに掛け算し，上位$k$個の修正された分類スコアを得る．
+\end{enumerate}
 
 \subsection{YOLACT++}
 \section{パノプティックセグメンテーション(Panoptic(?) segmentation)}
