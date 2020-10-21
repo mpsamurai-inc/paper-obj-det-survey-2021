@@ -161,19 +161,49 @@
 \subsubsection{Faster R-CNN}
 \subsubsection{TFANet}
 \subsubsection{Few-Shot Object Detection}
+
 \subsection{One-stage検出器}
 \subsubsection{YOLOv4}
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=8cm,clip]{fig/archi_YOLOv4.eps}
+    \end{center}
+    %\capwidth=90mm %
+    \caption{ YOLOv4 の構造．}
+    \label{fig:archi_YOLOv4}
+\end{figure}
+代表的なone-stage検出器であり，高速，高性能で軽量であることが特長である\cite{BWL20}．YOLOv3までの特徴を継承しつつ，採用可能なbackbone，neck, head から最適な組み合わせを選択し，また，適用可能な各種技術を取り込んで構成された(\ref{fig:archi_YOLOv4})．
+
+{\bf YOLOv4の構造:\ }入力画像は，backbone(画像の特徴を抽出する処理(縦横サイズを小さくしながら特徴量を含むチャネルを増やしていくこと))，neck(FPNやPANのように、ピラミッドを昇り降り横断する処理)，head(「backbone + neck」が出力する特徴量から、クラス信頼度とbounding boxオフセットを推論するネットワーク)の順に処理される．
+
+backbone である CSPDarknet53 は，YOLOv3 で使われた Darknet53 に Cross Stage Partial Network (CSP)を導入したものである．Darknet53 は，residual結合を持ちConvolution 2層で構成されるブロックが多数積み重なった構造であり，名前の53はConvolutionが53個あることから来ているとしている．ただし，最終層は全結合層である．CSP network は予測性能を向上させる工夫であり，注目するブロックへの特徴量入力を２つに分割し(互いに重複なし)，一方はそのブロックで処理し，もう一方は処理をスキップしてそのまま送り，これら２つを結合(concatenation)して出力することを行う．
+
+neck である modified PAN は，Path Aggregation Network (PAN)(3つのピラミッドを行き来して高解像度情報を特徴マップに効果的に伝えるモデル)におけるbottom-up path の加算計算を concatenation に変更したモデルである．ここではさらに，Modified Spatial Attention Module (SAM)(Convolutionの出力を2つに分岐し，一方にConvolution + sigmoid処理を行い，元信号に掛け算する)が導入されている．PANの出力は，Spacial Pyramid Pooling (SPP)(RoI Pooling をピラミッドの各レベルに対して実施し、結果を1次元に連結する)で処理されてheadに渡される．
+
+head は YOLOv3 のheadにおけるGlobal poolingをSPPに変更したものであり，FC層で処理して，クラス信頼度とbounding boxオフセットを出力する．
+
+{\bf YOLOv4の学習:\ }一般的な確率的降下法を用いた学習に加えて，いくつか効果的な学習の工夫を導入している: 
+
+\begin{description}
+    \item[CutMix] 学習画像の一部を切り取ったパッチを別の学習画像の一部に貼り付けて，正解ラベルもパッチの面積に比例させてミックスしたものを生成してそれで学習する．
+    \item[Mosaicデータ拡張] CutMixを，4つの画像を用いるように拡張したもの．
+    \item[DropBlock] 特徴マップに対して，無作為に選出した矩形範囲(block)にマスクを掛けたもので学習する．
+    \item[Class label smoothing] クロスエントロピー損失で学習する際に，logitが発散しないように正解ラベルを$q'(k|x)=(1-\epsilon)\delta_{k,y}+\epsilon/K$とした損失を用いて学習する．
+    \item[Complete IoU (CIoU) 損失] 二つのbounding boxが離れていても，近づきすぎていても適切な損失関数になるように，IoU損失を改良した損失関数．
+    \item[CmBN] 
+    \item[Self-adversarial-training (SAT)] まず，物体を写した元画像を改変し，物体が存在しない画像であると騙す画像を生成する．次に，この改変された画像中の物体を検出するように通常の学習を行う．
+    \item[Cosine annealing scheduler] コサイン関数の半周期の形状を利用して，学習率を少しずつ減少させる．これを周期を増やしながら複数回繰り返す．
+\end{description}
 \subsubsection{EfficientDet}
 \section{インスタンスセグメンテーション(Instance segmentation)}
 \subsection{Mask Scoring R-CNN (MS R-CNN)}
 %\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
-\begin{figure}[b]
+\begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_ms_rcnn.eps}
     \end{center}
     %\capwidth=90mm %
     \caption{ Mask Scoring R-CNN の構造．}
-    %\end{figure*}
     \label{fig:archi_ms_rcnn}
 \end{figure}
 マスク品質(インスタンスマスクと正解マスクとのIoUとして定量化されるもの)を分類スコアと明示的に関連付けたモデルである\cite{HHGHW19}．MS R-CNN は，予測マスクの品質を学習するためのブロック(MaskIoU Head)を，Mask R-CNN\cite{HGDG17} に導入したモデルになっている(\ref{fig:archi_ms_rcnn})．MaskIoU Headはインスタンスの特徴量と対応する予測マスクを一緒に取り込み，それを元にMask IoU を回帰推定する．そして，推論時に予測MaskIoUを分類スコアに掛け算して補正する．
