@@ -1,3 +1,14 @@
+% ビルドメモ
+% bibtex では、うまくいかない。
+% jbibtex はインストールされていない。
+% pbibtex を使うと旨くいく。
+% 次の手順でうまくいく。
+% $ platex template-j
+% $ pbibtex template-j
+% $ platex template-j
+% $ platex template-j
+% $ dvipdfmx template-j
+
 %% 和文論文用のテンプレート
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 1. 和文原稿
@@ -229,9 +240,30 @@ MaskIoU Head は分類スコア(R-CNN head の出力)の調整に使う．推論
 \end{enumerate}
 
 \subsection{YOLACT++}
-\cite{BZXL20}
+%\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=8cm,clip]{fig/archi_YOLACT++.eps}
+    \end{center}
+    %\capwidth=90mm %
+    \caption{ YOLACT++ の構造．}
+    \label{fig:archi_yolactpp}
+\end{figure}  
+実時間(${>}$30fps)で動作するインスタンスセグメンテーションのモデルであり，MS COCO に対して当時の最高性能に匹敵する性能(34.1 mAP at 33.5fps)を達成した\cite{BZXL20}．fully-convolutionモデルであり，deformable convolution をYOLACT\cite{BZXL19}のbackboneに導入する等の改良をしている。物体検出モデルのRetinaNet\cite{LGGHD17} をもとに，インスタンスセグメンテーション向けに改良したものである(\ref{fig:archi_yolactpp})．
 \subsubsection{YOLACT++ の学習}
+easy negative が多くて学習が困難になる問題は，OHEM法\footnote{入力画像に対する全RoIをミニバッチと考えて、損失の値でソートして識別が難しい negative を選択して学習させる方法．}を用いて negative:positive=3:1 にして学習することで対応する．
+Class 信頼度は分類損失(クロスエントロピー)，bbox はL1損失，mask (「mask係数×Prototype」で得られるもの)は pixel-wise binary cross entropy でそれぞれ学習する．Re-Scoring Net は Mask IoU(係数)を回帰する学習を行う．
+
+Semantic Segmentation Loss は，学習時のみ接続されるネットワークの学習であり，この学習の実施によりmAPが0.4ポイント向上する．P3特徴量出力に 1×1 convolution 1層で処理してcチャネルの出力をさせて最後にシグモイド関数をかける．これが正解 mask になるように学習する．
+
+%これにより，各画素にc個の[0,1]出力が割り当てられる．
+% (おそらく，pixel-wise binary cross entropy 損失と予想)
 \subsubsection{YOLACT++ の推論処理}
+Prediction Head が各 anchor の Class 信頼度，bbox，k 個の mask 係数を出力し，
+Protonet が k 個の Prototype (mask) を出力する．
+そして，Predition Head 出力を NMS 処理して選ばれた結果に対して，mask 係数と Prototype を積和した結果(全画面のmask)を，予測 bbox の外側を0で埋めたものを2値化して最終的な予測 mask 出力を得る．
+
+並行して，2値化する前の mask を Re-Scoring Net に入力して，mask IoU 出力を得る．分類スコアは，この mask IoU を掛けて補正される．
 \section{パノプティックセグメンテーション(Panoptic(?) segmentation)}
 \section{むすび}
 
