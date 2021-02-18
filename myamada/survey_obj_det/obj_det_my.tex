@@ -168,8 +168,50 @@
 {\bf 学習のしかた:\ }学習データは，推論実行に必要なデータに正解データを加えたものであり，いわゆる教師あり学習を行わせる．ただ，推論時には無い学習に関するパラメタの設定をしなければならない．検出器の構成(中間層の層数，特徴量次元のサイズ，検出器独自のパラメタなど)もこの段階で設定する．通常は，確率的降下法でモデルのパラメタを学習させることが多く，検出器の重みパラメタの初期化方法(平均，分散，値を指定など)，最適化方法(SGD, Adam, 他)，学習率のスケジューリング，学習打ち切り基準，ミニバッチサイズなどを指定する．学習時には交差検証を行わせて未学習データに対する誤差も計算させることができるので，その誤差を控えておくことにより推論時の予測精度を見積もることができる．
 
 {\bf 事前学習(pre-training)と事後学習(post-training, fine-tuning):\ }世界最高性能を出すほどの検出器の学習は，たいてい事前学習と事後学習の2段階で行われる．事前学習は主に公開データベースなどの大量データを用いて検出器の前半部分を学習させて適切な内部表現を獲得するために行われる．検出器によっては事前学習済みの重み係数パラメタが公開されているものもある．事後学習は，最終目的に合致したデータを追加して，場合によっては検出器の最終層を追加して，所望の検出処理を実行できるように最終調整の意味合いで実施するものである．事前/事後学習のやり方は各検出器によって異なるため，説明書きや論文等に記された方法を参考にして実行する必要がある．
+
+%{\bf Two-stage 検出器と one-stage 検出器:\ }
+物体検出器は次の2種類に分類できる\cite{JZLYLFQ19}：
+\begin{description}
+    \item[Two-stage 検出器] 高い位置決め精度と物体認識精度をもつ(Faster R-CNN など)．最初のCNNベースの物体検出器 R-CNN とその改良手法はこの方式である．次の2つのstageで処理される：
+    %\begin{description}
+    \begin{itemize}
+        \item 第1 stage: 物体の bbox の候補を選出する．Faster R-CNN では Region Proposal Network (RPN) と呼ばれている．
+        \item 第2 stage: RoI Pooling が各候補boxから特徴量を切り出し，後続の分類器と bbox 回帰器に送る．
+    %\end{description}
+    \end{itemize}
+    \item[One-stage 検出器] 推論速度が高速である(YOLO, SSD など)．Region proposal をせずに直接，入力画像から bbox を検出して出力する．近年では，改良により検出精度も向上している．
+\end{description}
+
 \subsection{Two-stage検出器}
 \subsubsection{Faster R-CNN}
+代表的なtwo-stage検出器であり，物体検出に対して当時の最高性能を達成しながら，処理速度の点でも大きく改善したモデルである\cite{RHGS15}．
+PASCAL VOC 2007 に対して mAP=69.9\% の精度を 5fps で達成した．
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=8cm,clip]{fig/archi_FasterRCNN.eps}
+    \end{center}
+    %\capwidth=90mm %
+    \caption{ Faster R-CNN の構造．}
+    \label{fig:archi_FasterRCNN}
+\end{figure}
+
+{\bf Faster R-CNN の構造:\ } \ref{fig:archi_FasterRCNN}に示すように，backbone，Region Proposal Network (RPN)，RoI Pooling，特徴抽出ネットワーク，分類器，回帰器で構成される．
+
+Backbone は CNN で構成され，$W{\times}H{\times}128$のサイズの特徴量を出力する．提案当時はVGG-16 \cite{SimZis15}などが用いられた．
+
+RPN は backbone が出力した特徴量をさらに CNN で処理してカテゴリに依存せずに物体を検出してその候補(proposalと呼ぶ)の RoI (bbox座標)と物体らしさ(objectness)を $n$ 個ずつ出力する．RPN内部では特徴量をCNNで変換し，特徴量の各空間座標点毎に $k$ 個の bbox(4個) と物体らしさ(2個)の数値を同時に出力している(計$WH(4{+}2)k$個)．これらの bbox は non-maximum suppression (NMS) によって，物体らしさが閾値を超えているものだけを残し，また，1個の物体を複数回検出したものも1個だけに集約することにより，RPNが出力するproposal を $n$ 個以下に抑える．ここで，各座標点に割り当てられた $k$ 個の初期 bbox を anchor box と呼んでいる．
+
+RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposals を受け取り，bbox内部の特徴量を切り出して物体の大きさにかかわらずに空間サイズを 7{$\times$}7 の固定サイズに変換する．
+
+固定サイズの特徴量は，共通の特徴抽出を行うFC層により $n{\times}1024$のデータに変換され，分類器と回帰器に送られて別々のFC層で処理されて，クラス分類確率と bbox 調整量がそれぞれ出力される．(★bbox調整量が全クラス分出力されるのかどうか確認要！)
+
+{\bf Faster R-CNN の学習:\ } 
+\begin{enumerate}
+    \item CNNによる特徴量生成は，画像認識などの学習で構築された重みを初期値として fine tuning を行う．
+    \item RPNだけをEnd-to-Endで学習．anchorと教師データに基づき，物体か背景か(物体らしさ，2k個)と，anchorからのずれ(4k個)を学習．
+    \item RPN固定で全体を学習する．RPNのRoI出力は全体の出力及びRoI poolingへ送る．特徴抽出器で分類と回帰の共通部分のFC計算を行う．分類器はクロスエントロピー，softmax などで計算し，回帰器が行う線形回帰はL1ノルムで学習し，bboxの位置の補正を行う．
+\end{enumerate}
+
 \subsubsection{TFANet}
 \subsubsection{Few-Shot Object Detection}
 
