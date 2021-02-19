@@ -213,24 +213,27 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
 \end{enumerate}
 
 \subsubsection{Two-Stage Fine-Tuning Approach (TFA)}
-Few-shot 物体検出のためのシンプルな Two-stage によるfine-tuning法である\cite{WHGDY20}．
-元来，深層学習は膨大な個数の学習データが必要であり，実用上の観点では学習データを集めることが困難な事象の一つであった．それゆえ，少ないサンプルから珍しいオブジェクトを見つけることを目的とする few-shot 物体検出の開発が進められている。
+Few-shot 物体検出のためのシンプルな two-stage の fine-tuning法である\cite{WHGDY20}．
+元来，深層学習は膨大な個数の学習データが必要であり，実用上の観点では学習データを集めることが困難な場合があった．それゆえ，少ないサンプルから珍しいオブジェクトを見つけることを目的とする few-shot 物体検出の開発が進められている。
 few-shot 学習の方法としてはメタ学習が有望と見られてきたが，このTFAはそれまで注目されてこなかった fine-tuning に焦点をあてることで大きな性能向上をもたらした．
 最終層のみ fine-tuning することが few-shot 物体検出にとって重要であることを発見し，それを用いた Two-stage Fine-tuning Approach (TFA)を提案した．
-メタ学習の従来手法よりも 2〜20ポイント優れた性能を出している．ただし，少数サンプルの分散が大きいと信頼性が低下することに注意が必要である．
-モデルの構造は，Faster R-CNNがそのまま使われている．本手法は，ネットワーク構造には殆ど依存しない．few-shot学習方法に特徴がある．
+メタ学習の従来手法よりも 2〜20ポイント高い精度を出している．ただし，少数サンプルの分散が大きいと信頼性が低下すると言われている．
+ベースとなる検出モデルは，Faster R-CNN がそのまま使われている．本手法はネットワーク構造には殆ど依存せず，few-shot 学習方法に特徴がある．
 
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_TFA.eps}
     \end{center}
     %\capwidth=90mm %
-    \caption{ Stage 2: Few-shot fine-tuning．}
+    \caption{ TFA の Few-shot fine-tuning (2nd stage)．}
     \label{fig:archi_TFA}
 \end{figure}
 {\bf Two-stage fine-tuning approach (TFA) の学習:\ } 
 \begin{enumerate}
-    \item aabb
+    \item Base model training (1st stage) \\
+    特徴抽出器$\mathcal{F}$と box 予測器(分類器, 回帰器)をbaseクラスの学習セット $C_{\rm b}$ で学習する．そのときの損失関数はFaster R-CNN \cite{RHGS15}と同じ $$L=L_{\rm rpn}+L_{\rm cls}+L_{\rm loc}$$を用いる．$L_{\rm rpn}$ はRPNの出力に適用され，前景を背景から区別し，anchorを学習データに近づける．$L_{\rm cls}$は box 分類器 C に対するクロスエントロピー損失，$L_{\rm loc}$は回帰器 R に対する平滑化L1損失である．
+    \item Few-shot fine-tuning (2nd stage) \\
+    バランスのとれた1クラスあたり $K$ shotsの学習セットを用意する．これらは base クラス $C_{\rm b}$ と novel クラス $C_{\rm n}$ を含む．Box 予測器の重みは乱数初期化する．特徴抽出器$\mathcal{F}$を固定してBox分類器と回帰器(検出モデルの最終層)をfine-tuningする．1st stage と同じ前記の損失関数 $L$ を用い，学習率は 1st stage から 20だけ減じる．また，2nd stage ではcosine 類似度を用いて分類器の損失を正規化する工夫を取り入れている．
 \end{enumerate}
 
 \subsubsection{Few-Shot Object Detection}
