@@ -8,10 +8,11 @@
    pages="5562--5570",
 }
 
+% YOLOv4
 @Article{BWL20,
    author = "A. Bochkovskiy and C.-Y. Wang and H.-Y. M. Liao",
    title = "{YOLOv4}: Optimal Speed and Accuracy of Object Detection",
-   journal = "preprint arXiv:2004.10934",
+   journal = "arXiv:2004.10934",
    year = 2020, 
    note = ""
 }
@@ -38,8 +39,27 @@
 }
    pages="1--1"
 
+% DropBlock
+@InProceedings{GLL18,
+  author = "G. Ghiasi and T.-Y. Lin and Q. V. Le",
+  title = "DropBlock: A Regularization Method for Convolutional Networks",
+  booktitle = "32nd Conference on Neural Information Processing Systems (NeurIPS 2018), Montréal, Canada",
+  year = 2018
+}
+  volume = ,
+
+% ResNet
+% https://www.semanticscholar.org/paper/Deep-Residual-Learning-for-Image-Recognition-He-Zhang/2c03df8b48bf3fa39054345bafabfeff15bfd11d
+@InProceedings{HZRS16,
+  author = "K. He and X. Zhang and S. Ren and J. Sun",
+  title = "Deep Residual Learning for Image Recognition",
+  booktitle = "Proc. of IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+  year = 2016,
+  pages = "770--778"
+}
+
 @InProceedings{HGDG17,
-  author = "K. He and G. Gkioxari and P. Dollár and R. Girshick",
+  author = "K. He and G. Gkioxari and P. Doll\'{a}r and R. Girshick",
   title = "Mask {R-CNN}",
   booktitle = "2017 IEEE International Conference on Computer Vision (ICCV), Venice",
   year = 2017,
@@ -49,7 +69,7 @@
 @InProceedings{HHGHW19,
   author = "Z. Huang and L. Huang and Y. Gong and C. Huang and X. Wang",
   title = "Mask {Scoring} {R-CNN}",
-  booktitle = "Proc. of IEEE/CVF Conference on Computer Vision and Pattern Recognition",
+  booktitle = "Proc. of IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
   year = 2019,
   pages = "6409--6418"
 }
@@ -64,16 +84,77 @@
   pages="128837--128868",
   url = {https://nottingham-repository.worktribe.com/output/4033852}
 }
-   number = "",
+  number = "",
+
+% Panoptic Segmentation
+@InProceedings{KHGRD19,
+  author = "A. Kirillov and K. He and R. Girshick and C. Rother and P. Doll\'{a}r",
+  title = "Panoptic Segmentation",
+  booktitle = "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Long Beach, CA",
+  month = jun,
+  year = 2019,
+}
+  pages = ""
+
+% FPN
+@InProceedings{LDGHHB17,
+  author = "T.-Y. Lin and P. Doll\'{a}r and R. Girshick and K. He and B. Hariharan and S. Belongie",
+  title = "Feature Pyramid Networks for Object Detection",
+  booktitle = "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+  month = jul,
+  year = 2017,
+  pages = "2117--2125"
+}
+  author = "T.-Y. Lin and P. Dollár and R. Girshick and K. He and B. Hariharan and S. Belongie",
 
 % RetinaNet
 @InProceedings{LGGHD17,
-  author = "T.-Y. Lin and P. Goyal and R. Girshick and K. He and P. Dollár",
+  author = "T.-Y. Lin and P. Goyal and R. Girshick and K. He and P. Doll\'{a}r",
   title = "Focal Loss for Dense Object Detection",
   booktitle = "2017 IEEE International Conference on Computer Vision (ICCV), Venice",
   year = 2017,
 }
   pages = ""
+
+% Feature Mimicking
+@InProceedings{LJY17,
+  author = "Q. Li and S. Jin and J. Yan",
+  title = "Mimicking Very Efficient Network for Object Detection",
+  booktitle = "Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Honolulu, HI",
+  month = jul,
+  year = 2017,
+  pages = "7341--7349"
+}
+
+% PANet
+@InProceedings{LQQSJ18,
+  author = "S. Liu and L. Qi and H. Qin and J. Shi and J. Jia",
+  title = "Path Aggregation Network for Instance Segmentation",
+  booktitle = "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Salt Lake City, UT",
+  month = jun,
+  year = 2018,
+  pages = "8759--8768"
+}
+
+% SGDR
+@InProceedings{LoshHut17,
+  author = "I. Loshchilov and F. Hutter",
+  title = "{SGDR:} Stochastic Gradient Descent with Warm Restarts",
+  booktitle = "5th International Conference on Learning Representations (ICLR)",
+  month = apr,
+  year = 2017,
+}
+  pages = ""
+
+% YOLOv3
+@Article{RedFar18,
+   author = "J. Redmon and A. Farhadi",
+   title = "{YOLOv3}: An Incremental Improvement",
+   journal = "arXiv:1804.02767",
+   year = 2018, 
+   note = ""
+}
+  volume={abs/1804.02767}
 
 % Faster R-CNN
 @InProceedings{RHGS15,
@@ -86,12 +167,41 @@
 }
   pages = ""
 
+% Grad-CAM (最悪に解りにくい文章！)
+@InProceedings{SCDVPB17,
+   author="R. R. Selvaraju and M. Cogswell and A. Das and R. Vedantam and D. Parikh and D. Batra",  
+   booktitle="2017 IEEE International Conference on Computer Vision (ICCV), Venice, Italy",   
+   title="Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization",
+   year=2017,  
+   pages="618--626"
+}
+   volume="",  
+   number="",  
+@Article{SCDVPB20,
+  author = "R. R. Selvaraju and M. Cogswell and A. Das and R. Vedantam and D. Parikh and D. Batra",
+  title = "Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization",
+  journal = "Int'l J. Comput. Vis.",
+  year = 2020,
+  volume = 128,
+  pages = "336–-359"
+}
+
 % VGG
 @InProceedings{SimZis15,
   author    = "K. Simonyan and A. Zisserman",
   title     = "Very Deep Convolutional Networks for Large-Scale Image Recognition",
   booktitle = "International Conference on Learning Representations (ICLR)",
   year      = "2015",
+}
+
+% EfficientDet
+@InProceedings{TPL20,
+  author = "M. Tan and R. Pang and Q. V. Le",
+  title = "{EfficientDet}: Scalable and Efficient Object Detection",
+  booktitle = "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Seattle, WA",
+  month = jun,
+  year = 2020,
+  pages = "10778--10787"
 }
 
 % TFANet
@@ -109,6 +219,51 @@
   editor = "Hal Daumé III and Aarti Singh",
   series = "Proceedings of Machine Learning Research",
   publisher = {ML Research Press},
+
+% CSPNet
+@InProceedings{WLWCHY20,
+  author = "C.-Y. Wang and H.-Y. M. Liao and Y.-H. Wu and P.-Y. Chen and J.-W. Hsieh and I-H. Yeh",
+  title = "{CSPNet:} A New Backbone that can Enhance Learning Capability of CNN",
+  booktitle = "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW), Seattle, WA",
+  year = 2020,
+  pages = "1571--1580"
+}
+
+% CBAM
+@InProceedings{WPLK18,
+  author = "S. Woo and J. Park and J.-Y. Lee and I. S. Kweon",
+  title = "CBAM: Convolutional Block Attention Module",
+  booktitle = "Proceedings of the European Conference on Computer Vision (ECCV)",
+  year = 2018,
+  pages = "3-19"
+}
+
+% CutMix
+@inproceedings{YHCOYC19,
+  author="S. Yun and D. Han and S. Chun and S. J. Oh and Y. Yoo and J. Choe",
+  title="{CutMix:} Regularization Strategy to Train Strong Classifiers with Localizable Features",
+  booktitle = "2019 IEEE/CVF International Conference on Computer Vision (ICCV), Seoul, Korea (South)",
+  year=2019,
+  month = oct,
+  volume="",
+  number="",  
+  pages="6022--6031",
+  doi = {10.1109/ICCV.2019.00612}
+}
+Y1  - 27 Oct.-2 Nov. 2019
+
+% Distance-IoU (DIoU)損失
+@InProceedings{ZWLLYR20,
+  author = "Z. Zheng and P. Wang and W. Liu and J. Li and R. Ye and D. Ren",
+  title = "Distance-IoU Loss: Faster and Better Learning for Bounding Box Regression",
+  booktitle = "Proceedings of the AAAI Conference on Artificial Intelligence (AAAI), New York, USA",
+  year = 2020,
+  month = feb,
+  volume= 34,
+  number="07",  
+  pages = "12993--13000"
+}
+
 
 
 
