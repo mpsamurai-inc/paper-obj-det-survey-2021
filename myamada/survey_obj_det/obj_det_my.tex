@@ -41,6 +41,13 @@
 \usepackage{graphics}
 \usepackage{fancybox}
 \usepackage{comment}
+\usepackage{tabularx}
+\usepackage{array,booktabs}
+\usepackage{diagbox}
+\usepackage{multirow}
+%\usepackage{setspace}
+%\usepackage{longtable} どうやら jsaiart では使えない (T_T)
+\newcommand{\bhline}[1]{\noalign{\hrule height #1}}
 
 \Vol{12}
 \No{1}
@@ -97,8 +104,413 @@
 \begin{document}
 \maketitle
 
-★ここにチートシートを出力する．
 \section{まえがき}
+
+%\begin{table*}
+%    \caption{物体検出のモデル選択．}
+%    \label{tbl-select-h}
+%    \begin{center}
+%        %\begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
+%        \begin{tabularx}{\linewidth}{|p{1.3cm}|p{1.0cm}|X|X|X|} \hline
+%        %\begin{tabular}{|l|c|c|c|} \hline
+%            \multicolumn{2}{|c|}{} & \multicolumn{3}{c|}{画素毎のクラス分類} \\ \cline{3-5}
+%            \multicolumn{2}{|c|}{} & \centering{全画素} & \centering{物体領域のみ} & \multicolumn{1}{c|}{しない} \\ \hline
+%           \multirow{3}{*}{物体検出} & \multirow{2}{*}{する} & Panoptic segmentation \cite{KHGRD19} & Instance segmentation ( YOLACT++ \cite{BZXL20}，MS R-CNN \cite{HHGHW19} など ) & 物体検出 ( YOLOv4 \cite{BWL20}, EfficientDet \cite{TPL20} など ) \\ \cline{2-5}
+%             & しない & Semantic segmentation & \centering{---} & \multicolumn{1}{c|}{---} \\ \hline
+%        %\end{tabular}
+%        \end{tabularx}
+%    \end{center}
+%\end{table*}
+\begin{table*}
+    \caption{物体検出に関連するニューラルネットワークモデル．}
+    \label{tbl-select-l}
+    \begin{center}
+        \setlength{\doublerulesep}{0.5pt}
+        \begin{tabularx}{\linewidth}{|p{1.7cm}|p{1.0cm}||X|p{3.3cm}|} \hline
+        %\begin{tabularx}{\linewidth}{|p{1.7cm}|p{1.0cm}||X|p{3.3cm}|} \toprule
+            \multicolumn{2}{|c||}{} & \multicolumn{2}{c|}{物体検出} \\ \cline{3-4}
+            \multicolumn{2}{|l||}{} & \centering{する} & \multicolumn{1}{c|}{しない} \\ \hline\hline
+            画素毎の & 全画素 & Panoptic segmentation \cite{KHGRD19} & Semantic segmentation \\ \cline{2-4}
+            クラス分類 & 物体領域のみ  & Instance segmentation ( YOLACT++ \cite{BZXL20}，MS R-CNN \cite{HHGHW19} など ) &  \multicolumn{1}{c|}{---} \\ \cline{2-4}
+            & しない & 物体検出 ( YOLOv4 \cite{BWL20}, EfficientDet \cite{TPL20} など ) & \multicolumn{1}{c|}{---} \\ 
+            \hline
+            %\bottomrule
+        \end{tabularx}
+    \end{center}
+\end{table*}
+
+\begin{table*}
+    \caption{物体検出のオプション技術．}
+    \label{tbl-select-sub}
+    \begin{center}
+        \setlength{\tabcolsep}{3pt}
+        \footnotesize
+        %\begin{tabular}{|c|c|c|} \hline
+        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
+        \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
+            \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
+
+            Few-Shot Object Detection with Attention-RPN and Multi-Relation Detector &  & Few-shot 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item ★作成予定．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item ★作成予定．
+            \end{itemize}
+            \\
+
+            Two-stage Fine-tuning Approach (TFA) & \cite{WHGDY20} & Few-shot 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Few-shot 物体検出のための2ステージfine-tuningを提案．最終層のみfine-tuningする．
+                \item Faster R-CNNがそのまま使われている(few-shot学習方法が新しい)．
+                \item 特徴抽出器は backbone(ResNet, VGG16等)，RPN，FC sub-networkを含む．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item メタ学習の従来手法よりも2〜20ポイント優れている．ただし，少数サンプルの分散が大きいと信頼性が低下する．
+            \end{itemize}
+            \\
+
+            Feature mimic method & \cite{LJY17} & 物体検出の蒸留 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 物体検出に対して有効な蒸留方法．
+                \item 大きなネットワークの特徴マップを教師として学習．大小ネットそれぞれRoIからサンプリングした特徴を用い，小ネットの特徴は変換層を用いて大ネットのサイズにマッピングする．
+            \end{itemize}
+            & 物体検出に対して，初めて有効な蒸留の方法を示した．\\
+
+            Grad-CAM & \cite{SCDVPB17,SCDVPB20} & 画像中の重要領域の可視化 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Gradient-weighted Class Activation Mapping (Grad-CAM)を提案．任意の目的概念(イヌ，人，花瓶，…)の流れの最終convolution層での勾配を使い，その概念を予測するため重要な画像中の領域を示す局所化マップを生成．
+                \item どのモデルに対しても，アーキテクチャ変更や再学習無しに適用可能．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Non-attention ベースのモデルであっても，入力画像における判別領域を可視化できる．
+            \end{itemize}
+            \\
+            \bottomrule
+        \end{tabularx}
+    \end{center}
+\end{table*}%
+
+\begin{table*}
+    \caption{物体検出のための主なニューラルネットワークモデル（１）(Segmentationなし)．}
+    \label{tbl-cheat1}
+    \begin{center}
+        \setlength{\tabcolsep}{3pt}
+        \footnotesize
+        %\begin{tabular}{|c|c|c|} \hline
+        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
+        \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
+            \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
+
+            ResNet & \cite{HZRS16} & DNN & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item フィードフォワード型のニューラルネットで最もよく使われる代表的なもの．
+                \item  深い階層にもかかわらず高速に学習が可能．
+                %\vspace{-0.5\baselineskip}
+            \end{itemize} &   \\
+            %\\[-8pt] \midrule[0.01pt] \\[-6pt]
+            
+            Feature Pyramid Network (FPN) & \cite{LDGHHB17} & 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 複数サイズの検出モデルの多くで採用．
+                \item コストのわずかな増加でCNNに特徴ピラミッドを導入．
+                \item Faster R-CNNと組み合わせて，COCO2016トップの成績を達成． 
+            %\end{itemize}\vspace{0.5\baselineskip} 
+            \end{itemize}
+            & 物体検出の多くのモデルにおいて，その構造の一部として使われている．\\
+            %\\[-8pt] \midrule[0.01pt] \\[-6pt]
+
+            Faster R-CNN  & \cite{RHGS15} & 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Two-stage 検出モデルの基準となっている．Fast R-CNNを大きく改良したもの．
+                \item 画像ピラミッドの代わりに複数サイズの anchor box を用いて複数サイズの物体を検出．
+                \item まずRPNだけをEnd-to-Endで学習．次に固定AnchorとGrandTruthに基づき，物体/背景(2$k$)，ずれ(4$k$)を推論するように全体を学習．
+            %\end{itemize}\vspace{0.5\baselineskip} & 高速で検出性能が高い． \\ 
+            \end{itemize} & ILSVRC \& COCO 2015 Competitions において(segmentationを含む)5部門で1位．さらに，当時としては処理も高速．\\ 
+
+            RetinaNet & \cite{LGGHD17} & 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item YOLACTにおいてベースのモデルとして使われている．
+                \item one-stageの検出器の新しい損失関数 Focal loss を提案．Focal Lossを導入したシンプルな検出器をRetinaNet と呼ぶ．
+                \item Focal Loss は膨大な数の easy negatives が誤差関数に影響を与えすぎることを防ぐ．
+                \item ROIの形にかかわらず各レベル同じ領域の情報から推論する．候補が絞られないからNegative候補の個数は莫大($10^4$〜$10^5$)になる(one-stage detectorの動作の特徴)．
+                \item 従来のcross entropyは，誤差関数として考えると $p{>}$0.6 ならば既に学習済みと考えられるが，曲線はほぼ線形で，$p{>}$0.6 の領域でもさらに学習を進めてしまい悪影響を与えていた．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item one-stage detectorであるにもかかわらず，性能が従来のtwo-stage detectorの最高性能に追いついた．
+            \end{itemize}
+            \\
+
+            YOLOv3 & \cite{RedFar18} & 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item YOLOv2 の改良(one-stage detector)．
+                \item 320 × 320 YOLOv3 は 22 ms で走り，SSD と同じ精度 28.2 mAP であり，スピードは3倍速い．
+                \item 過去のYOLOは小さな物体が苦手だったが，YOLOv3は大きい物体が苦手．
+                \item FPNのように3つの異なるスケールの特徴量を抽出．
+                %\vspace{-0.7\baselineskip}
+            \end{itemize}
+            & \\
+            %\bhline{0.1pt} \\
+
+            EfficientDet & \cite{TPL20} & 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item -
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item MS COCO Object Detection の AP の最高性能を達成(YOLOv4発表時点)．
+            \end{itemize}
+            \\
+
+            YOLOv4 & \cite{BWL20} & 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item YOLOv3 の改良(one-stage 検出器)．
+                \item 以下の新しい特徴を組み合わせて、state-of-the-art の結果を得た： WRC, CSP, CmBN, SAT, Mish activation, Mosaic data augmentation, CmBN, DropBlock regularization, CIoU loss．
+                \item 43.5\%AP (65.7\% AP 50 ) for the MS COCO dataset at a real-time speed of ∼65 FPS on Tesla V100.
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item EfficientDet 相当の性能を達成しつつ，速度2倍を達成．
+                \item YOLOv3と比べてAPを10ポイント，FPSを12ポイント向上させた．
+            \end{itemize}
+            \\
+            \bottomrule
+        \end{tabularx}
+    \end{center}
+\end{table*}%
+
+\begin{table*}
+    \caption{物体検出のための主なニューラルネットワークモデル（２）(Segmentationあり)．}
+    \label{tbl-cheat2}
+    \begin{center}
+        \setlength{\tabcolsep}{3pt}
+        \footnotesize
+        %\begin{tabular}{|c|c|c|} \hline
+        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
+        \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
+            \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
+
+            Mask R-CNN & \cite{HGDG17} & Instance Segmentation & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Faster R-CNN を拡張し，並列にマスクを予測するブランチを追加．PANetのベースとなるモデル．
+                \item BackboneはFPNが使われることがある．
+                \item 計算量はFaster R-CNNより少し増える程度．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Bbox検出も併用していることで，安定した性能を達成．
+            \end{itemize}
+            \\
+
+            Path Aggregation Network (PANet) & \cite{LQQSJ18} & Instance Segmentation & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Mask R-CNN + FPN に改良を加えた．
+                \item Bottom-up path augmentation により下位層から上位層への情報経路を短くして，元画像の正確な位置情報を特徴量と関係づける．
+                \item Adaptive feature pooling が全ての特徴レベルをリンクして直接後続に伝える．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item  多くの改良点の合わせ技で数ポイントの精度向上を達成．
+                \item COCO2017 Instance Segmentationで1位相当の性能を達成．
+            \end{itemize}
+            \\
+
+            Mask Scoring R-CNN (MS R-CNN) & \cite{HHGHW19} & Instance Segmentation & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 予測マスクの品質を学習する MaskIoU Head を備えた， Mask Scoring R-CNN (two-stage 検出器) を提案．
+                \item MaskIoU Head によりマスク品質を回帰推定する．
+                \item 推論時に、推定マスク品質を分類スコアに掛け算して補正し，マスク品質が悪いのに分類スコアが大きくなってしまうことを抑制する．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Mask R-CNN を抜いて，インスタンスセグメンテーションの最高性能を達成．
+            \end{itemize}
+            \\
+
+            YOLACT++ & \cite{BZXL20} & Instance Segmentation & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item RetinaNet (物体検出) にブランチを幾つか追加してマスク予測機能を持たせたモデル (one-stage 方式)．
+                \item 実時間 ($>$30 fps) Instance Segmentationであって，MS COCO に対して最高性能相当を達成．
+                \item Fast NMS を提案し，12msほど計算時間を短縮した．
+                \item Deformable convolution をbackboneに導入．
+                \item Re-Scoring Networkを導入してマスク品質に基づいてマスク予測を再格付けする等の改良．
+                \item 34.1 mAP on MS COCO at 33.5fps を達成．
+                \item 検出anchorの(スケールとアスペクト比の)選択を工夫．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 実時間動作を満たしつつ，Mask R-CNN に近いセグメンテーション性能を達成．
+            \end{itemize}
+            \\
+
+            Panoptic Segmentation & \cite{KHGRD19} & Panoptic Segmentation & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 画像の全画素に対してクラス分類を行い(semantic segmentation)，且つ，物体に関しては個体を区別して画素単位で識別する(instance segmentation)．
+                \item 単に，semantic segmentation と instance segmentation の両方を行えば済むかもしれないが，学習時に両方の教師データが与えられることは片方だけの場合に比べて情報量が多いため，一つのモデルで両方の処理を行わせた場合に推論精度が良くなる可能性がある(★裏を取る必要あり)．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item -
+            \end{itemize}
+            \\
+            \bottomrule
+        \end{tabularx}
+    \end{center}
+\end{table*}%
+\begin{table*}
+    \caption{物体検出の性能向上技術．}
+    \label{tbl-option}
+    \begin{center}
+        \setlength{\tabcolsep}{3pt}
+        \footnotesize
+        %\begin{tabular}{|c|c|c|} \hline
+        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
+        \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
+            \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
+
+            CSPNet & \cite{WLWCHY20} & CNNの軽量化 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Cross Stage Partial Network (CSPNet) を提案し，従来法を軽くする．
+                \item ImageNetデータセットにおいて，同等以上の精度で計算量を20\%削減．MS COCOの物体検出データセットではAP50に関しては最高性能を達成．
+                \item CSPNetは簡単に実装できて，ResNet, ResNeXt, DenseNet に基づくアーキテクチャを扱える汎用性を持つ．
+            \end{itemize}
+            &
+            \\
+
+            Convolutional Block Attention Module (CBAM) & \cite{WPLK18} & CNNの性能向上． & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 任意のCNNに適用可能な attention module．
+                \item 分類と検出の評価実験において一貫して性能向上を示しており，オーバーヘッドは殆ど無い．
+                \item 可視化するときは、Grad-CAM を使用．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 全ての場合において，ベースラインよりも性能を向上させた．
+            \end{itemize}
+            \\
+
+            DropBlock & \cite{GLL18} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Convolution層に対して有効な，構造化されたdropout方法．特徴マップの連続した領域をドロップさせる．
+                \item ImageNet分類では，ResNet-50 に適用すると1.6ポイント精度が向上．COCO detection では RetinaNet のAPを36.8\%から38.4\%に向上させた．
+            \end{itemize}
+            &
+            \\
+
+            CutMix & \cite{YHCOYC19} & データ拡張 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 学習画像間で、画像のパッチをカット＆ペーストし，正解ラベルもパッチの面積に比例させてミックスする．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item ImageNet(Cls), ImageNet(Loc), Pascal VOC Detection に関して，代表的な従来法（Mixup, Cutout）よりも良い性能を示す．
+            \end{itemize}
+            \\
+
+            SGDR (Cosine annealing scheduler) & \cite{LoshHut17} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 周期的にSGDの warm restart をすることを提案．各restartにて，学習率を徐々に小さくするようにスケジューリングする．
+                \item YOLOv4で使われている Cosine annealing scheduler はこれのこと．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Warm reatart付きのSGDは，従来法に比べて，同じ性能に至るまでのepoch数が1/2から1/4で済む．
+            \end{itemize}
+            \\
+
+            Distance-IoU (DIoU) 損失／Complete IoU (CIoU)損失
+            & \cite{ZWLLYR20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 予測boxと目標boxとの正規化距離を用いた Distance-IoU (DIoU) 損失を提案（従来はLn損失等が使われることも多かった）．
+                \item DIoU は IoU損失やGIoU損失より学習の収束が速い．
+                \item さらに，追加でアスペクト比を直接損失に組み込んだ，収束が速く性能が良い Complete IoU (CIoU)損失を提案する．
+                \item DIoU と CIoU を，YOLOv3, SSD, Faster R-CNN に導入することで，性能を向上させることができる．
+                \item DIoU は NMS に簡単に適用することができる．
+            \end{itemize}
+            &
+            \\
+            \bottomrule
+        \end{tabularx}
+    \end{center}
+\end{table*}%
+
+
 %■ 本論文の目的：誰(理工系大学２年生)を対象に、何(物体検出の始め方)を伝えるか
 %\subsubsection*{この論文の狙い}
 {\bf この論文の狙い:\ }このサーベイは，理工系大学2年生程度の数学の知識を前提に，物体検出をこれから始めるにはどうすればよいかという道すじを伝えることを目的として執筆したものである．物体検出でできることは何?から始まり，物体検出をするために必要なもの(ハード，ソフト，データ，知識，明確な目的)を簡潔に纏めてある．また，読者にとっての理想的なサーベイ(即時性，分かりやすさ，一言で説明，参考文献は充実)というものの一つの解として，随時更新されるGitHub上の(日本語で書かれた)物体検出まとめサイトとライブラリを紹介する．
@@ -154,12 +566,6 @@
 我々は，github上に随時更新される形式でサーベイを公開することを試みた．出版されたときには既に古くなっているという懸念を取り払える可能性を期待している．また，この分野に新規参入しようとしている人がなるべく短時間で必要な情報にたどり着き，取り組んでいる問題を解決する最適な方法を見つけたり，或いは，新たな研究に取り組めることを目指し，内容の拡充性や緻密性よりも，なるべく視覚的に解りやすいコンパクトな内容になるよう心掛けた．
 
 \section{物体検出(Object detection)}
-%\begin{figure}[t]
-%    \begin{center}
-%        \includegraphics[width=8cm,clip]{fig/test_fig2.eps}
-%    \end{center}
-%    \caption{ 図の説明文 ... }
-%\end{figure}
 \subsection{物体検出器(object detector)の働き}
 {\bf 基本動作:\ }物体検出器は，画像(1枚の静止画をファイルにしたもの)を処理し，処理結果(検出個数，検出物体の画像座標，検出物体の種類)を出力する．セグメンテーションの場合は，出力解像度(画像のサイズ)に応じた各画素のクラス分類結果も出力される．画像を読み込ませる際には，幅と高さを含む情報も与える必要がある．検出器によっては画像サイズや画像ファイル形式が指定されているものもあるのでその場合は，予め画像ファイルを変換する前処理が必要となる．
 
@@ -276,6 +682,7 @@ neck である Modified PAN は，Path Aggregation Network (PAN)(3つのピラ�
     \item[Cosine annealing scheduler] コサイン関数の半周期の形状を利用して，学習率を少しずつ減少させる．これを周期を増やしながら複数回繰り返す．
 \end{description}
 \subsubsection{EfficientDet}
+
 \section{インスタンスセグメンテーション(Instance segmentation)}
 \subsection{Mask Scoring R-CNN (MS R-CNN)}
 %\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
@@ -329,7 +736,8 @@ Protonet が k 個の Prototype (mask) を出力する．
 そして，Predition Head 出力を NMS 処理して選ばれた結果に対して，mask 係数と Prototype を積和した結果(全画面のmask)を，予測 bbox の外側を0で埋めたものを2値化して最終的な予測 mask 出力を得る．
 
 並行して，2値化する前の mask を Re-Scoring Net に入力して，mask IoU 出力を得る．分類スコアは，この mask IoU を掛けて補正される．
-\section{パノプティックセグメンテーション(Panoptic(?) segmentation)}
+\section{パノプティックセグメンテーション(Panoptic segmentation)}
+\cite{KHGRD19}．
 \section{むすび}
 
 \begin{acknowledgment}
