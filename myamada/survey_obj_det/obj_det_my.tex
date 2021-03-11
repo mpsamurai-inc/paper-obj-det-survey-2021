@@ -123,7 +123,7 @@
 %    \end{center}
 %\end{table*}
 \begin{table*}
-    \caption{物体検出に関連するニューラルネットワークモデル．}
+    \caption{物体検出に関連するニューラルネットワークモデルの分類．}
     \label{tbl-select-l}
     \begin{center}
         \setlength{\doublerulesep}{0.5pt}
@@ -206,7 +206,7 @@
 
 \subsection{使えるデータやリソースに制約がある場合(\ref{tbl-select-sub})}
 \begin{table*}
-    \caption{物体検出のオプション技術．}
+    \caption{物体検出のオプション技術(★もっといい言葉ないか？)．}
     \label{tbl-select-sub}
     \begin{center}
         \setlength{\tabcolsep}{3pt}
@@ -273,7 +273,7 @@
         \end{tabularx}
     \end{center}
 \end{table*}%
-\ref{tbl-select-sub}は推論モデル構築の状況に応じて必要となるオプション技術である．
+\ref{tbl-select-sub}は推論モデル構築の状況に応じて必要となるオプション技術(★もっといい言葉ないか？)である．
 
 {\bf 学習データが少ない場合}(数個〜十数個)には，Few-shot 物体検出の方法が必要になる\cite{WHGDY20}．
 
@@ -512,6 +512,7 @@ neck である Modified PAN は，Path Aggregation Network (PAN)(3つのピラ�
     \item[Cosine annealing scheduler] コサイン関数の半周期の形状を利用して，学習率を少しずつ減少させる．これを周期を増やしながら複数回繰り返す．
 \end{description}
 \subsubsection{EfficientDet}
+★ 執筆予定．
 
 \section{インスタンスセグメンテーション(Instance segmentation)}
 \begin{table*}
@@ -671,15 +672,15 @@ Protonet が k 個の Prototype (mask) を出力する．
 
 \section{物体検出に使われる性能向上技術}
 \begin{table*}
-    \caption{物体検出の性能向上技術．}
-    \label{tbl-option}
+    \caption{物体検出の性能向上技術（１）．}
+    \label{tbl-option1}
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
         %\begin{tabular}{|c|c|c|} \hline
         %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
-            \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
+            \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
             CSPNet & \cite{WLWCHY20} & CNNの軽量化 & 
             \begin{itemize}
@@ -718,17 +719,55 @@ Protonet が k 個の Prototype (mask) を出力する．
             &
             \\
 
+            Mosaic data augmentation & \cite{BWL20} & データ拡張 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 異なる学習画像4枚のパッチをモザイク状に並べて，正解ラベルもパッチの面積に比例させてミックスする．言わば，CutMixの4枚版．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item YOLOv4に対しては，CutMixよりも良い性能を示す．
+            \end{itemize}
+            \\
+
             CutMix & \cite{YHCOYC19} & データ拡張 & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item 学習画像間で、画像のパッチをカット＆ペーストし，正解ラベルもパッチの面積に比例させてミックスする．
+                \item 学習画像のパッチを別の学習画像にカット＆ペーストして1枚の画像に2種類の画像を混在させ，正解ラベルもパッチの面積に比例させてミックスする．
             \end{itemize}
             &
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
                 \item ImageNet(Cls), ImageNet(Loc), Pascal VOC Detection に関して，代表的な従来法（Mixup, Cutout）よりも良い性能を示す．
+            \end{itemize}
+            \\
+
+            mixup & \cite{ZCDL18} & データ拡張 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 2つの教師データと，配分比率$\lambda\ $(0.0〜1.0)を用いて，入力画像とラベル(one-hot encoding)の両方を$\tilde{x}=\lambda x+(1-\lambda)x$で線形結合して新たな教師データを生成する．
+            \end{itemize}
+            &
+            \\
+
+            Self-adversarial training (SAT) & \cite{BWL20} & データ拡張 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 学習が困難になるように学習データの入力を改変した学習データを生成し，それを学習することで検出性能を向上させる．
+                \item Generative Adversarial Networks (GAN) やadversarial attack などとは異なり，あくまでも通常の検出性能向上を目的とする．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item mAP が 46.7\%{$\rightarrow$}50.5\% に向上したという実験結果がある．
             \end{itemize}
             \\
 
@@ -747,6 +786,16 @@ Protonet が k 個の Prototype (mask) を出力する．
             \end{itemize}
             \\
 
+            Mish activation
+            & \cite{Misra20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 活性化関数 $f(x) = x \tanh(\ln(1 + e^x))$ を使う．
+            \end{itemize}
+            &
+            \\
+
             Distance-IoU (DIoU) 損失／Complete IoU (CIoU)損失
             & \cite{ZWLLYR20} & 学習性能の向上 & 
             \begin{itemize}
@@ -757,6 +806,215 @@ Protonet が k 個の Prototype (mask) を出力する．
                 \item さらに，追加でアスペクト比を直接損失に組み込んだ，収束が速く性能が良い Complete IoU (CIoU)損失を提案する．
                 \item DIoU と CIoU を，YOLOv3, SSD, Faster R-CNN に導入することで，性能を向上させることができる．
                 \item DIoU は NMS に簡単に適用することができる．
+            \end{itemize}
+            &
+            \\
+
+            Label smoothing
+            & \cite{SVISW16} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item クロスエントロピー損失で学習する際に，正解ラベルを $q'(k|x){=}(1{-}\epsilon)\delta_{k,y}{+}\epsilon/K \ (\epsilon{>}0)$とおいてlogitが発散して不安定化することを防ぐ．
+            \end{itemize}
+            &
+            \\
+
+            Dimension cluster
+            & \cite{RedFar17} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Anchor box の初期値の設定方法(「dimension」は寸法という意味)
+                \item 学習セットの bbox に対して k-means クラスタリングを適用して，自動的に anchor box の良い事前分布を取得．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 学習を高速化し検出性能を向上させる．
+            \end{itemize}
+            \\
+            \bottomrule
+        \end{tabularx}
+    \end{center}
+\end{table*}%
+
+\begin{table*}
+    \caption{物体検出の性能向上技術（２）．}
+    \label{tbl-option2}
+    \begin{center}
+        \setlength{\tabcolsep}{3pt}
+        \footnotesize
+        %\begin{tabular}{|c|c|c|} \hline
+        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
+        \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
+            \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
+
+            Batch normalization
+            & \cite{IoffeSzege15} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item ニューラルネットワークに内在する内部共変量シフトの問題を解消するため，学習時に各ミニバッチに対する入力分布を正規化することをモデルの一部として組み込んだもの．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 高い学習率を設定することが可能になり，学習を飛躍的に加速させることができる．
+            \end{itemize}
+            \\
+
+            Cross-iteration batch normalization (CBN)
+            & \cite{YCZHL20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 直近の複数の iteration における平均や標準偏差などの統計量を，現在の iteration から線形近似し平均化を行うことで、平均や標準偏差を補正する．(重みの更新の単位を iteration としている．) 統計量の推定精度の向上が図れる．
+            \end{itemize}
+            &
+            \\
+
+            Cross mini-batch normalization (CmBN)
+            & \cite{BWL20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item (ミニバッチ複数回につき1回の重み更新を行う場合に)ミニバッチをまたいで「平均，分散」を蓄積して，重みの更新と同じタイミングで，蓄積した「平均，分散」に基づいてbiasとscaleを更新する．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 計算コストをほとんど増やさずに，統計量の推定精度向上が図れる．
+            \end{itemize}
+            \\
+
+            Eliminate grid sensitivity
+            & \cite{BWL20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 各セルが守備範囲とする bbox 領域を，隣り合う同士が少し重なりを持つように設定することで，セル境界における検出動作を安定化させる．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item セル境界における検出器の動作を安定させる．
+            \end{itemize}
+            \\
+
+            Spatial Pyramid Pooling (SPP)
+            & \cite{HZRS15,HZRS14} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Pooling 戦略の一つであり，画像のサイズによらずに複数サイズの受容野に対応した複数の特徴量(固定長)を生成する．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Pascal VOC 2007 に対して，当時の最高検出性能を達成しつつ，R-CNN よりも 24-102倍速い処理を達成．
+            \end{itemize}
+            \\
+
+            Atrous spatial pyramid pooling (ASPP)
+            & \cite{CPKMY17} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 特徴抽出において解像度が縮小されないように upsampling フィルタを用いた畳み込み(atrous convolution / dilated convolution)と，SPPを組み合わせた， ASPP を提案した．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item PASCAL VOC-2012 semantic image segmentation task にて2016年当時の最高性能を達成．
+            \end{itemize}
+            \\
+
+            Spatial attention module (SAM)
+            & \cite{WPLK18} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 空間次元のどこが情報量が多いかを求めている．
+                \item チャネル方向の集約を average pooling と max-pooling の両方で処理し，さらに7$\times$7 の convolutionを1回行うことで，各画素に対する重みを求める．
+                \item YOLOv4においては，2種類の pooling を1$\times$1 convolution に置きかえる等の改変を行った(簡素な構成の) modified SAM を用いている．
+            \end{itemize}
+            &
+            \\
+
+            Soft-NMS (non-maximum supression)
+            & \cite{BSCD17} & 推論性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 一部重なっている2つ以上のbboxのIoUが閾値を超えている場合，bbox候補を削除する代わりに，そのスコアにペナルティを与える．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item IoUの値だけで候補を削除しないため，近接した物体に対する検出性能を向上させる．
+            \end{itemize}
+            \\
+
+            DIoU-NMS
+            & \cite{ZWLLYR20} & 推論性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Distance-IoU 損失を用いて NMS 処理を行う．
+                \item DIoUは2つのbboxの中心間距離を考慮し，一部重なっている別の物体を区別しやすくしている．
+            \end{itemize}
+            &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item 一部重なっている別の物体に対する検出性能を向上させる．
+            \end{itemize}
+            \\
+
+            Multi-input weighted residual connections (MiWRC)
+            & \cite{TPL20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item PAN構造において，backbone側からトップダウン経路をスキップしてもう一つのボトムアップ経路の同じレベルへのスキップ接続を設けること．
+            \end{itemize}
+            &
+            \\
+
+            Scale-wise Feature Aggregation Module (SFAM)
+            & \cite{ZSWTCCL19} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item scale-wise に特徴量を連結し，適応的attentionメカニズムを通して，multi-level 特徴ピラミッドへ特徴量を集約する．
+            \end{itemize}
+            &
+            \\
+
+            Adaptively Spatial Feature Fusion (ASFF)
+            & \cite{LHW19} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item point-wise level re-weighting (空間座標毎の重み付け)を用いて異なるスケールの特徴マップを統合する．
+            \end{itemize}
+            &
+            \\
+
+            weighted Bi-directional Feature Pyramid Network (BiFPN)
+            & \cite{TPL20} & 学習性能の向上 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item スケール毎に定められた重みで level re-weighting を実行し，異なるスケールの特徴マップの荷重和を計算して特徴マップを統合する．
             \end{itemize}
             &
             \\
