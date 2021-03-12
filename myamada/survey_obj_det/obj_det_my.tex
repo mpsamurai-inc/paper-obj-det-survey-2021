@@ -12,7 +12,7 @@
 %% 和文論文用のテンプレート
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 1. 和文原稿
- \documentclass[originalpaper]{jsaiart}     % 原著論文 Original Paper
+ \documentclass[originalpaper,fleqn]{jsaiart}     % 原著論文 Original Paper
 % \documentclass[blindreview]{jsaiart}      % 査読用
 %
 % \documentclass[shortpaper]{jsaiart}       % 速報論文 Short Paper
@@ -32,7 +32,7 @@
 
 
 %%% amsmathパッケージの注意点 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \usepackpage{amsmath}
+\usepackage{amsmath}
 % 数式番号の参照は \ref ではなく，\eqref を用いること
 % documentclass のオプションに fleqnを指定すること
 % 例: \documentclass[technicalpaper,fleqn]{jsaiart}
@@ -49,6 +49,7 @@
 %\usepackage{setspace}
 %\usepackage{longtable} どうやら jsaiart では使えない (T_T)
 \newcommand{\bhline}[1]{\noalign{\hrule height #1}}
+\newcommand{\vect}[1]{\boldsymbol #1}
 
 \Vol{12}
 \No{1}
@@ -144,7 +145,11 @@
 
 %■ 本論文の目的：誰(理工系大学２年生)を対象に、何(物体検出の始め方)を伝えるか
 %\subsubsection*{この論文の狙い}
-{\bf この論文の狙い:\ }このサーベイは，理工系大学2年生程度の数学の知識を前提に，物体検出をこれから始めるにはどうすればよいかという道すじを伝えることを目的として執筆したものである．物体検出でできることは何?から始まり，物体検出をするために必要なもの(ハード，ソフト，データ，知識，明確な目的)を簡潔に纏めてある．また，読者にとっての理想的なサーベイ(即時性，分かりやすさ，一言で説明，参考文献は充実)というものの一つの解として，随時更新されるGitHub上の(日本語で書かれた)物体検出まとめサイトとライブラリを紹介する．
+{\bf この論文の狙い:\ }このサーベイは，情報処理全般の知識を前提に，物体検出をこれから始めるにはどうすればよいかという道すじを伝えることを目的として執筆したものである．物体検出でできることは何?から始まり，物体検出をするために必要なもの(ハード，ソフト，データ，知識，目的)，最新の物体検出モデルについて簡潔に纏めてある．
+%また，読者にとっての理想的なサーベイ(即時性，分かりやすさ，一言で説明，参考文献は充実)というものの一つの解として，随時更新されるGitHub上の(日本語で書かれた)物体検出まとめサイトとライブラリを紹介する．
+本サーベイで引用したライブラリ及び最新情報の追記等は，(GitHubアドレスを記載)にある．
+
+物体検出についての本格的な最近のサーベイは文献\cite{JZLYLFQ19}に詳しいので参照されたい．
 
 %■ 最近の世の中の状況のおさらい
 {\bf 世の中の状況:\ }近年，「AI(人工知能)」という言葉が国内外に蔓延しており，技術者のみならず一般の人の日常生活にもすっかり浸透した．常に手の届くところにAIがあり，AIに囲まれて生活していると言っても過言ではない．テレビやインターネットの画像は，本物と見間違えるほどの人工画像で溢れ，スマホや机上のスピーカーに話しかけるとあらゆる情報を教えてくれるばかりでなく，電化製品を操作することもできるようになった．高速道路を自動運転する車も増えている．
@@ -216,7 +221,9 @@
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
-            Few-Shot Object Detection with Attention-RPN and Multi-Relation Detector &  & Few-shot 物体検出 & 
+            Few-Shot Object Detection with Attention-RPN and Multi-Relation Detector 
+            \vspace{0.7\baselineskip}
+            &  & Few-shot 物体検出 & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
@@ -682,15 +689,20 @@ Protonet が k 個の Prototype (mask) を出力する．
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
-            CSPNet & \cite{WLWCHY20} & 予測性能向上 (CNNの軽量化) & 
+            Cross Stage Partial Network (CSPNet) 
+            & \cite{WLWCHY20} & 予測性能向上 (及びCNNの軽量化) & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item Cross Stage Partial Network (CSPNet) を提案し，従来法を軽くする．
-                \item ImageNetデータセットにおいて，同等以上の精度で計算量を20\%削減．MS COCOの物体検出データセットではAP50に関しては最高性能を達成．
-                \item CSPNetは簡単に実装できて，ResNet, ResNeXt, DenseNet に基づくアーキテクチャを扱える汎用性を持つ．
+                \item 分割した特徴量の片方をある処理ブロックで処理し，未処理の特徴量と連結．性能を低下させずに処理を削減．
+                \item ResNet, ResNeXt, DenseNet を扱える汎用性を持つ．
             \end{itemize}
             &
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item ImageNetデータセットでは同精度で計算量を20\%削減．
+            \end{itemize}
             \\
 
             Spatial Pyramid Pooling (SPP)
@@ -704,7 +716,7 @@ Protonet が k 個の Prototype (mask) を出力する．
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item Pascal VOC 2007 に対して，当時の最高検出性能を達成しつつ，R-CNN よりも 24-102倍速い処理を達成．
+                \item PascalVOC2007の最高性能．R-CNNの24倍超高速．
             \end{itemize}
             \\
 
@@ -713,13 +725,13 @@ Protonet が k 個の Prototype (mask) を出力する．
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item 特徴抽出において解像度が縮小されないように upsampling フィルタを用いた畳み込み(atrous convolution / dilated convolution)と，SPPを組み合わせた， ASPP を提案した．
+                \item 特徴抽出において upsampling フィルタを用いた畳み込みとSPPを組み合わせた．
             \end{itemize}
             &
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item PASCAL VOC-2012 semantic image segmentation task にて2016年当時の最高性能を達成．
+                \item PascalVOC-2012 で2016年当時の最高性能．
             \end{itemize}
             \\
 
@@ -728,7 +740,7 @@ Protonet が k 個の Prototype (mask) を出力する．
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item PAN構造において，backbone側からトップダウン経路をスキップしてもう一つのボトムアップ経路の同じレベルへのスキップ接続を設けること．
+                \item PAN構造において，backbone側からトップダウン経路をスキップして，出力側のもう一つのボトムアップ経路の同じレベルへのスキップ接続を設けること．
             \end{itemize}
             &
             \\
@@ -738,12 +750,13 @@ Protonet が k 個の Prototype (mask) を出力する．
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item scale-wise に特徴量を連結し，適応的attentionメカニズムを通して，multi-level 特徴ピラミッドへ特徴量を集約する．
+                \item 全特徴ピラミッドから特定スケールの特徴マップを取り出して連結し，Global average pooling で $1{\times}1{\times}1024$の重みを作成して特徴量を修正(attention処理)．
             \end{itemize}
             &
             \\
 
             Adaptively Spatial Feature Fusion (ASFF)
+            \vspace{0.7\baselineskip}
             & \cite{LHW19} & 予測性能の向上 (特徴量の統合) & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
@@ -753,12 +766,13 @@ Protonet が k 個の Prototype (mask) を出力する．
             &
             \\
 
-            weighted Bi-directional Feature Pyramid Network (BiFPN)
+            Weighted Bi-directional Feature Pyramid Network (BiFPN)
+            \vspace{0.7\baselineskip}
             & \cite{TPL20} & 予測性能の向上 (特徴量の統合) & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item スケール毎に定められた重みで level re-weighting を実行し，異なるスケールの特徴マップの荷重和を計算して特徴マップを統合する．
+                \item PANetにMiWRCを追加する等の改良を加えた構造(\ref{fig:archi_wrc})．スケール毎の重みで level re-weighting を実行して特徴マップを統合する．BiFPNは多段に接続される．
             \end{itemize}
             &
             \\
@@ -768,9 +782,9 @@ Protonet が k 個の Prototype (mask) を出力する．
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item 任意のCNNに適用可能な attention module．
-                \item 分類と検出の評価実験において一貫して性能向上を示しており，オーバーヘッドは殆ど無い．
-                \item 可視化するときは、Grad-CAM を使用．
+                \item 任意のCNNに適用可能な2種類の attention module．
+                \item Channel attention module (CAM)は，空間方向の global pooling で各チャネルの重みを計算して attention 処理．
+                \item Spatial attention module (SAM)は，チャネル方向の global pooling で各空間座標の重みを計算して attention 処理． 
             \end{itemize}
             &
             \begin{itemize}
@@ -879,7 +893,9 @@ Protonet が k 個の Prototype (mask) を出力する．
             \\
 
             Mish activation
-            & \cite{Misra20} & 予測性能の向上 (活性化関数) & 
+            & \cite{Misra20} & 予測性能の向上 (活性化関数) 
+            \vspace{0.7\baselineskip}
+            & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
@@ -1024,12 +1040,55 @@ Protonet が k 個の Prototype (mask) を出力する．
     \end{center}
 \end{table*}%
 
-\ref{tbl-option1}と\ref{tbl-option2}に，物体検出のモデルと組み合わせて用いられる主な性能向上技術を示した．同じ物体検出モデルであってもそのモデルを構成する各種モジュールや，そのモデルと組み合わせる各種性能向上技術の利用有無によって予測性能は変化する．性能を最大化する各種技術の組み合わせにより10ポイント程度のAPの上積みができる場合があり，最適な組み合わせはタスクやデータの種類よって変化するため，文献に記載された期待性能が出ない場合などには，そのタスクに最適な組み合わせをあらためて探索すべきである．
+\ref{tbl-option1}と\ref{tbl-option2}に，物体検出のモデルと組み合わせて用いられる主な性能向上技術を示した．同じ物体検出モデルであってもそのモデルを構成する各種モジュールや，そのモデルと組み合わせる各種性能向上技術の利用有無によって予測性能は変化する．性能を最大化する各種技術の組み合わせにより10ポイント程度のAPの上積みができる場合があり，最適な組み合わせはタスクやデータの種類によって変化するため，文献に記載された期待性能が出ない場合などには，そのタスクに最適な組み合わせをあらためて探索するのがよい．
 
 \subsection{部分構造，特徴量生成}
+{\bf Cross Stage Partial Network (CSPNet)}\cite{WLWCHY20}．ある経路を流れる特徴量を2分割し，片方だけ次の処理ブロックで処理した後に，処理していないもう片方の特徴量と連結する．性能をほとんど低下させずに処理を軽くすることができる．ResNet, ResNeXt, DenseNet に基づくアーキテクチャを扱える汎用性がある．
+ImageNetデータセットでは同等以上の精度で計算量を20\%削減．MS COCOデータセットではAP50の場合に最高性能を達成．
+
+{\bf Spatial Pyramid Pooling (SPP)}\cite{HZRS15,HZRS14}．Pooling 戦略の一つであり，画像のサイズによらずに複数サイズの受容野に対応した複数の特徴量(固定長)を生成する．Pascal VOC 2007 に対して，当時の最高検出性能を達成しつつ，R-CNN よりも 24〜102倍速い処理を達成．
+
+{\bf Atrous spatial pyramid pooling (ASPP)}\cite{CPKMY17}．特徴抽出において解像度が縮小されないように upsampling フィルタを用いた畳み込み(atrous convolution / dilated convolution)と，SPPを組み合わせた構造である．
+PASCAL VOC-2012 semantic image segmentation task にて2016年当時の最高性能を達成．
 
 \subsection{特徴量の統合}
+{\bf Multi-input weighted residual connections (MiWRC)} \cite{TPL20}．PAN構造において，backbone側の各レベルの特徴量からトップダウン経路をスキップして出力側のもう一本のボトムアップ経路の同じレベルへのスキップ接続を設けること(\ref{fig:archi_wrc}の赤線で示された接続)．
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=8cm,clip]{fig/archi_BiFPN,WRC.eps}
+    \end{center}
+    %\capwidth=90mm %
+    \caption{ Weighted Bi-directional Feature Pyramid Network (BiFPN)．赤線で示した接続が Multi-input weighted residual connections (MiWRC)．}
+    \label{fig:archi_wrc}
+\end{figure}
+
+{\bf Scale-wise Feature Aggregation Module (SFAM)} \cite{ZSWTCCL19} の処理手順:
+(1) 異なる特徴抽出レベルの特徴ピラミッド 1, 2, …, $t$ が生成されている．
+(2) 複数の特徴ピラミッドの全てから，特定のスケールの特徴マップを取り出して連結したものを作成．
+(3) 連結した特徴量を，Global average poolingでサイズ $1{\times}1{\times}1024$ にして(Squeeze)，さらに2つのFC層(Excitation)で変換して重みを作成(重要なチャネルは学習により大きな重みになっているものと考える)．
+(4) 重みを用いて，Squeezeする前の特徴量を修正．
+
+{\bf Adaptively Spatial Feature Fusion (ASFF)} \cite{LHW19}の処理手順:
+\newcommand{\yb}[2]{\boldsymbol{y}^{#1}_{#2}}
+\newcommand{\xb}[2]{\boldsymbol{x}^{#1}_{#2}}
+\begin{enumerate}
+    \item (Level 1,2,3から成る)特徴ピラミッドが得られているものとする．
+    \item 各レベルの特徴量を統合した Level $l$ の特徴量を $\vect{y}^l$ とする．$\vect{y}^l$ を構成する空間座標 $(i,j)$ における特徴量 $\yb{l}{ij}$ を次式で計算する: $$ \yb{l}{ij} = \alpha^l_{ij}\xb{1{\rightarrow}l}{ij} + \beta^l_{ij}\xb{2{\rightarrow}l}{ij} + \gamma^l_{ij}\xb{3{\rightarrow}l}{ij}. $$ ただし，$\xb{n{\rightarrow}l}{ij}$はLevel $n$ からLevel $l$ にリサイズされた特徴量，$\alpha^l_{ij},\beta^l_{ij},\gamma^l_{ij}$は全チャネルで共有されるスカラー変数．
+    \item 生成された $\vect{y}^l$ を各レベルの後段の検出器に送る．
+\end{enumerate}
+ASFF は空間座標毎の重み付けをしており，point-wise level re-weighting と呼ばれる．
+
+{\bf Weighted Bi-directional Feature Pyramid Network (BiFPN)} \cite{TPL20}．PANetに対して，入力から出力 node への接続(MiWRC)を追加する等の改良を加えた構造(\ref{fig:archi_wrc})．スケール毎に定められた重みで level re-weighting を実行し，異なるスケールの特徴マップの荷重和を計算して特徴マップを統合する．BiFPNは多段に接続され，性能が最大になるように段数を最適化する．
+
 \subsection{Attention}
+{\bf Convolutional Block Attention Module (CBAM)} \cite{WPLK18}．CNNのための，単純で効果的な attention module．任意のCNNに適用可能で，オーバーヘッドは殆ど無い．
+分類と検出の評価実験において一貫して改良を示している．
+情報表現の可視化にも利用可能．channel attention module (CAM)とspatial attention module (SAM) を実行してCNNの中間の特徴量を洗練させる．
+
+CAM は，空間方向に global max pooling と global average pooling を行い，それぞれ全結合層を通したものの和にsigmoid関数を作用させて，各チャネルの重みを求めて，attention 処理をする．
+
+SAM は，チャネル方向に global max pooling と global average pooling を行い，それらを連結したものにconvolutionを実行してチャネルサイズを 1 にする．さらに sigmoid関数を作用させて，各空間座標の重みを求め，その重みを用いてattention 処理をする．
+
 \subsection{バッチ正規化}
 \subsection{Non-maximum suppression (NMS)}
 \subsection{活性化関数}
