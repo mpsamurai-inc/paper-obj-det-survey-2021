@@ -1159,8 +1159,174 @@ DropOut\cite{SHKSS14} は学習時に毎回ランダムに $\alpha$ $(0\leq\alph
 
 \appendix
 
-\section{AP, mAP}
+\section{Average Precision (AP) と mAP}
 物体検出の評価基準として一般的に用いられる average precision (AP) と mean average precision (mAP) を文献\cite{PNS20}に沿って説明する．
+
+\subsection{IoU (Intersection over Union)と確信度(confidence)}
+物体検出器の出力には，bbox座標と各クラスの確信度が必ず含まれる．これらの値を用いて検出結果の正しさを評価する．
+
+確信度(confidence value)は多くの場合0.0から1.0までの確率を表す実数値で表現され，クラス確率，スコアなどと呼ばれることもあり，指定されたクラスに属する確率の推定値を表す．
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=7cm,clip]{fig/IoU.eps}
+    \capwidth=70mm %
+    \caption{ IoU (Intersection over Union). bbox の一致の程度をIoU ($0{\leq}\mbox{IoU}{\leq}1$)で測る．}
+    \label{fig:IoU}
+\end{figure}
+IoUは bbox の一致の程度の指標であり，推定(predicted) bboxが教師データ(ground truth)のbboxにどれくらい近いかを定量的に表したものである(\ref{fig:IoU}参照)．
+
+物体検出における正しい検出(正検出)とは、推定bboxと正解bboxとのIoUが閾値以上であり，且つ，推定bboxに対してクラスが正しく予測された場合を言う．
+IoUが閾値より小さい場合，または，クラスを間違えている場合は，誤った検出(誤検出)という．
+
+
+\subsection{適合率(precision)と再現率(recall)}
+% 元ファイルは Google Sheets なので，一応それをExcelに変換したファイルを fig/ に置いておく（体裁が乱れているが）．
+%\begin{figure}[tb]
+%    \centering
+%    \includegraphics[width=5cm,clip]{fig/confusion_matrix.eps}
+%    \caption{ 混同行列 (confusion matrix). }
+%    \label{fig:ConMat}
+%\end{figure}
+\begin{table}
+    \caption{ 混同行列 (confusion matrix)．}
+    \label{tbl-confuse}
+    \centering
+    \begin{tabular}{cc|c|c|} 
+        \multicolumn{2}{c}{} & \multicolumn{2}{c}{予測されたクラス} \\ 
+        \multicolumn{2}{l}{} & \multicolumn{1}{c}{P} & \multicolumn{1}{c}{N} \\ \cline{3-4}
+        \vspace*{-3mm}
+         & P & 真陽性 (TP) & 偽陰性 (FN) \\ 
+        \vspace*{-2mm}
+        実際のクラス\!\!\!\!\!\! &  &  &  \\ \cline{3-4}
+         & N  & 偽陽性 (FP) &  真陰性 (TN) \\  \cline{3-4}
+    \end{tabular}
+\end{table}
+\ref{tbl-confuse}は分類器の性能を数値化するときに使われる混同行列 (confusion matrix) である．物体検出の性能評価に活用するために，混同行列に対して物体検出の検出結果を次のように当てはめて考える：
+\\
+\begin{description}
+    \item[TP: True Positive] 正しく検出された個数
+    \item[FP: False Positive] 誤って検出された個数
+    \item[FN: False Negative] 検出されなかった教師データbboxの個数
+    \item[TN: True Negative] 定義しない(物体検出タスクでは，検出すべきでない bbox は無数に存在して数えられないため)．
+\end{description}\vspace{4mm}
+この定義より，全予測bbox数はTP${+}$FP，全教師データbbox数はTP{+}FNで表される．
+
+一つの教師データbbox に対して複数の予測bboxが検出された場合は，確信度が最大のものをTPとし，その他のものはFPとする．これは検出個数が多すぎることも誤りと捉えられるからである．
+
+適合率 (precision)，再現率 (recall) は，TP，FP，FN を用いて次式で定義される：
+\begin{align}
+    \mbox{適合率 Precision} =& \frac{\rm TP}{\rm TP+FP} = \frac{(正しく検出された個数)}{\rm (全予測bbox数)} \\
+    \mbox{再現率 Recall} =& \frac{\rm TP}{\rm TP+FN} = \frac{(正しく検出された個数)}{\rm (全教師データbbox数)}
+\end{align}
+
+適合率，再現率はモデルの評価指標であり，両者はトレードオフの関係にある．構築したモデルの良し悪しをどちらを基準に評価するかは，モデルの利用目的に合わせて判断する必要がある．
+
+\subsection{PR曲線(Precision-Recall Curve)}
+%\begin{figure}[h]
+\begin{figure}[tb]
+    \centering
+        \includegraphics[width=2.5cm,clip]{fig/pics_cat-1.eps}
+        %\hspace{14mm}
+        %\qquad \qquad
+        \includegraphics[width=2.5cm,clip]{fig/pics_cat-2.eps}
+        \includegraphics[width=2.5cm,clip]{fig/pics_cat-3.eps}\\
+        (a) \hspace{20mm} (b) \hspace{20mm} (c)
+    %\capwidth=90mm %
+    \caption{ Bounding box の例(猫の検出)．(画像は https://unsplash.com/photos/Eoth0QkgT4I のものを使用．)}
+    \label{fig:cat}
+\end{figure}
+PR曲線とは，確信度の閾値を変化させて (再現率，適合率) をプロットしたグラフである(\ref{fig:PRinterp})．以下では\ref{fig:cat}の検出結果が得られた場合を考える．5匹の猫(赤枠)に対して物体検出モデルが10個の bbox(緑枠)を検出したものとする．検出結果(\ref{tbl:detect_cat})を確信度の大きい順に並べた表(\ref{tbl:detect_cat_PR})を作成して，(再現率，適合率)の推移(右端の2つのカラム)を求める．\ref{tbl:detect_cat_PR}の recall と precision をグラフにプロットしたのが \ref{fig:PRinterp}の青線である．PR曲線は，曲線が右上にあるほど性能が良いことを示す．
+\begin{table}
+    \caption{物体検出結果．}
+    \label{tbl:detect_cat}
+    \centering
+    %\setlength{\tabcolsep}{1pt}
+    \footnotesize
+    \begin{tabular}{cccccc} 
+        \toprule
+        \ref{fig:cat} & Box & 確信度 & IoU & T & F \\ 
+        \midrule
+        (a) & A & 92\% & 0.78 & 1 & 0 \\ 
+        (a) & B & 88\% & 0.73 & 0 & 1 \\ 
+        (a) & C & 74\% & 0.32 & 0 & 1 \\ 
+        (b) & D & 83\% & 0.78 & 1 & 0 \\ 
+        (b) & E & 80\% & 0.86 & 0 & 1 \\ 
+        (b) & F & 89\% & 0.41 & 0 & 1 \\ 
+        (b) & G & 84\% & 0.91 & 1 & 0 \\ 
+        (c) & H & 96\% & 0.86 & 1 & 0 \\ 
+        (c) & I & 78\% & 0.21 & 0 & 1 \\ 
+        (c) & J & 72\% & 0.66 & 1 & 0 \\ 
+        \bottomrule
+    \end{tabular}
+\end{table}%
+\begin{table}
+    \caption{物体検出結果 (確信度でソートしてprecisionとrecallを計算したもの)．}
+    \label{tbl:detect_cat_PR}
+    \centering
+    \setlength{\tabcolsep}{1pt}
+    \footnotesize
+    \begin{tabular}{cccccccccccc} 
+        \toprule
+        図 & Box & 確信度 & IoU & T & F & TP & FP & TP+FP & TP+FN & Precision & Recall \\ 
+        \midrule
+        (c) & H & 96\% & 0.86 & 1 & 0 & 1 & 0 & 1 & 5 & 1.00 & 0.2 \\ 
+        (a) & A & 92\% & 0.78 & 1 & 0 & 2 & 0 & 2 & 5 & 1.00 & 0.4 \\ 
+        (b) & F & 89\% & 0.41 & 0 & 1 & 2 & 1 & 3 & 5 & 0.67 & 0.4 \\ 
+        (a) & B & 88\% & 0.73 & 0 & 1 & 2 & 2 & 4 & 5 & 0.50 & 0.4 \\ 
+        (b) & G & 84\% & 0.91 & 1 & 0 & 3 & 2 & 5 & 5 & 0.60 & 0.6 \\ 
+        (b) & D & 83\% & 0.78 & 1 & 0 & 4 & 2 & 6 & 5 & 0.67 & 0.8 \\ 
+        (b) & E & 80\% & 0.86 & 0 & 1 & 4 & 3 & 7 & 5 & 0.57 & 0.8 \\ 
+        (c) & I & 78\% & 0.21 & 0 & 1 & 4 & 4 & 8 & 5 & 0.50 & 0.8 \\ 
+        (a) & C & 74\% & 0.32 & 0 & 1 & 4 & 5 & 9 & 5 & 0.44 & 0.8 \\ 
+        (c) & J & 72\% & 0.66 & 1 & 0 & 5 & 5 & 10 & 5 & 0.50 & 1.0 \\ 
+        \bottomrule
+    \end{tabular}
+\end{table}%
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=7cm,clip]{fig/PR_Curve.eps}
+%    %\capwidth=90mm %
+%    \caption{ $PR$曲線．}
+%    \label{fig:PR}
+%\end{figure}
+
+\subsection{AP と mAP}
+\begin{figure}
+    \centering
+    \includegraphics[width=7cm,clip]{fig/PR_interp.eps}
+    %\capwidth=90mm %
+    \caption{ PR曲線(青)とそれに対応する$P_{\rm interp}(R)$(黄)．}
+    \label{fig:PRinterp}
+\end{figure}
+PR曲線をもとに precision の平均を求めたものが，ほぼ average precision (AP) になるが，正確には次式で定義する  interpolated precision $P_{\rm interp}(R)$ を用いて AP を計算する：
+$$ P_{\rm interp}(R) = \max_{\tilde{R}:\tilde{R}{\geq}R} P(\tilde{R}). $$
+この式は，その $R$ より右側の $P(R)$ の最大値を値として持つという意味であり，ちょうど左上から水を流して水たまりの水面を表すと考えてよい(\ref{fig:PRinterp}の黄色の線)．APはこの $P_{\rm interp}(R)$ の下の領域の面積として定義される．
+
+そもそも precision と recall は背反する関係にあるため，曲線全体では，閾値を調整してどちらかを増やそうとするともう一方が減少する．しかしながら，狭い範囲ではガタガタしており，もし $R$ (recall) を増加させることで $P(R)$ (precision) も増加するときには増加したところを採用すべきという解釈である\cite{MRS09}．
+
+APの計算方法には，次の2つの計算方法がある：
+
+\noindent{\bf All-point interpolation AP}は$P_{\rm interp}(R)$ の下の領域の面積を厳密に計算したものである：
+$$ \mbox{AP}_{\rm all} = \int_0^1 P_{\rm interp}(R) {\rm d}R. $$
+
+\noindent{\bf 11-point interpolation AP}はPR曲線を \{0, 0.1, 0.2, $\cdots$, 1.0\} の11個のrecallレベルでのprecisionで代表させ，それらの平均値を計算したものである(\ref{fig:PR11})：
+$$ \mbox{AP}_{11} = \frac{1}{11} \sum_{R\in\{0, 0.1, 0.2, \cdots, 1.0\}} P_{\rm interp}(R). $$
+%$$ \mbox{AP}_{11} = \frac{1}{11} \sum_{R\in\{0\}}$$
+\begin{figure}
+    \centering
+    \includegraphics[width=7cm,clip]{fig/PR_11.eps}
+    %\capwidth=90mm %
+    \caption{ $P_{\rm interp}$曲線(11点の代表点による)．}
+    \label{fig:PR11}
+\end{figure}
+
+\noindent{\bf AP50, AP75, AP@[.50:.05:.95]}．APの値はIoUの閾値に依存する．閾値$X$を指定したAPはしばしばAP$X$と記される．AP50は IoU=.50，AP75はIoU=.75を表す．
+AP@[.50:.05:.95]は，ステップサイズを0.05とし，IoU=.50からIoU=.95までのそれぞれのIoU閾値で算出したAPの平均を計算したものである．単に AP と書いた場合，この AP@[.50:.05:.95] を表す場合があるので注意が必要である．
+
+\noindent{\bf mAP (mean average precision)}．通常，APは特定のクラス(上記の猫など)に対する性能を表すが，検出対象の全クラス(猫，犬，車，$\cdots$)に対してAPの平均を計算したものを mAP といい，次式で定義される：
+$$ \mbox{mAP} = \frac{1}{N} \sum^N_{i{=}1} \mbox{AP}_i. $$
+ただし，AP$_i$ は$i$番目のクラスに対するAP，$N$は評価すべきクラスの総数である．
 
 %\section{付録のタイトル2}
 %付録の本文2
