@@ -221,35 +221,49 @@
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
-            Few-Shot Object Detection with Attention-RPN and Multi-Relation Detector 
+            Feature Reweighting \ (o)
             \vspace{0.7\baselineskip}
-            &  & Few-shot 物体検出 & 
+            \footnote[2] & \cite{KLWYFD19} & Few-shot 物体検出 & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item ★作成予定．
+                \item Few-shot 物体検出器の先駆け．
+                \item メタ特徴量学習器，reweightingモジュール，予測モジュールで構成．学習後はreweightingモジュールは削除される．
+            \end{itemize}
+            &
+            \\
+
+            Attention-RPN \ (t)
+            \vspace{0.7\baselineskip}
+            \footnote[1] & \cite{FZTT20} & Few-shot 物体検出 & 
+            \begin{itemize}
+                \vspace{-0.7\baselineskip}
+                \setlength{\leftskip}{-3mm}
+                \item Attention-RPN, Multi-Relation Detector, Contrastive Training から成る．
+                \item few-shot 検出用の1000カテゴリのデータセットを作成．
             \end{itemize}
             &
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item ★作成予定．
+                \item 再学習とfine-tuningが不要なfew-shot検出．
             \end{itemize}
             \\
 
-            Two-stage Fine-tuning Approach (TFA) & \cite{WHGDY20} & Few-shot 物体検出 & 
+            Two-stage Fine-tuning Approach (TFA) \ (t) 
+            \vspace{0.7\baselineskip}
+            & \cite{WHGDY20} & Few-shot 物体検出 & 
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item Few-shot 物体検出のための2ステージfine-tuningを提案．最終層のみfine-tuningする．
-                \item Faster R-CNNがそのまま使われている(few-shot学習方法が新しい)．
-                \item 特徴抽出器は backbone(ResNet, VGG16等)，RPN，FC sub-networkを含む．
+                \item Faster R-CNNを用い，最終層のみfine-tuningする．
+                \item Backbone(ResNet, VGG16等)，RPN，FC sub-networkから成る(\ref{fig:archi_TFA})．
             \end{itemize}
             &
             \begin{itemize}
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
-                \item メタ学習の従来手法よりも2〜20ポイント優れている．ただし，少数サンプルの分散が大きいと信頼性が低下する．
+                \item メタ学習の従来手法よりも2〜20ポイント優れている．
             \end{itemize}
             \\
 
@@ -277,12 +291,13 @@
             \end{itemize}
             \\
             \bottomrule
+            &  &  & *1\ (t) : two-stage 検出器\quad *2\ (o) : one-stage 検出器 &  \\
         \end{tabularx}
     \end{center}
 \end{table*}%
 \ref{tbl-select-sub}は推論モデル構築の状況に応じて必要となるオプション技術(★もっといい言葉ないか？)である．
 
-\noindent{\bf 学習データが少ない場合}(数個〜十数個)には，Few-shot 物体検出の方法が必要になる\cite{WHGDY20}．
+\noindent{\bf 学習データが少ない場合}(数個〜十数個)には，few-shot 物体検出が必要になる\cite{KLWYFD19,FZTT20,WHGDY20}．
 
 \noindent{\bf モデルをなるべく小さくする必要がある場合}は，蒸留をすることでネットワーク規模を削減できる\cite{LJY17}．
 
@@ -356,7 +371,7 @@
                 \vspace{-0.7\baselineskip}
                 \setlength{\leftskip}{-3mm}
                 \item YOLOv2 の改良(one-stage detector)．
-                \item 320 × 320 YOLOv3 は 22 ms で走り，SSD と同じ精度 28.2 mAP であり，スピードは3倍速い．
+                \item 320 × 320 YOLOv3 は 22 ms で走り，SSD\cite{LAESRFB16} と同じ精度 28.2 mAP であり，スピードは3倍速い．
                 \item 過去のYOLOは小さな物体が苦手だったが，YOLOv3は大きい物体が苦手．
                 \item FPNのように3つの異なるスケールの特徴量を抽出．
                 %\vspace{-0.7\baselineskip}
@@ -422,7 +437,7 @@
         \item 第2 stage: RoI Pooling が各候補boxから特徴量を切り出し，後続の分類器と bbox 回帰器がそれを処理する．
     %\end{description}
     \end{itemize}
-    \item[One-stage 検出器] 推論速度が高速である(YOLO, SSD など)．Region proposal をせずに直接，入力画像から bbox を検出して出力する．近年では，改良により検出精度も向上している．
+    \item[One-stage 検出器] 推論速度が高速である(YOLO, SSD\cite{LAESRFB16} など)．Region proposal をせずに直接，入力画像から bbox を検出して出力する．近年では，改良により検出精度も向上している．
 \end{description}
 
 \subsection{Two-stage検出器}
@@ -455,13 +470,13 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
     \item RPN固定で全体を学習する．RPNのRoI出力を全体の出力及びRoI poolingへ送り，特徴抽出器で分類と回帰の共通部分のFC計算を行う．分類器はクロスエントロピー，softmax などで計算し，回帰器が行う線形回帰はL1ノルムで学習し，bboxの位置の補正を行う．
 \end{enumerate}
 
-\subsubsection{Two-Stage Fine-Tuning Approach (TFA)}
-Few-shot 物体検出のためのシンプルな two-stage の fine-tuning法である\cite{WHGDY20}．
-元来，深層学習は膨大な個数の学習データが必要であり，実用上の観点では学習データを集めることが困難な場合があった．それゆえ，少ないサンプルから珍しいオブジェクトを見つけることを目的とする few-shot 物体検出の開発が進められている。
-few-shot 学習の方法としてはメタ学習が有望と見られてきたが，このTFAはそれまで注目されてこなかった fine-tuning に焦点をあてることで大きな性能向上をもたらした．
-最終層のみ fine-tuning することが few-shot 物体検出にとって重要であることを発見し，それを用いた Two-stage Fine-tuning Approach (TFA)を提案した．
-メタ学習の従来手法よりも 2〜20ポイント高い精度を出している．ただし，少数サンプルの分散が大きいと信頼性が低下すると言われている．
-ベースとなる検出モデルは，Faster R-CNN がそのまま使われている．本手法はネットワーク構造には殆ど依存せず，few-shot 学習方法に特徴がある．
+%\subsubsection{Two-Stage Fine-Tuning Approach (TFA)}
+%Few-shot 物体検出のためのシンプルな two-stage の fine-tuning法である\cite{WHGDY20}．
+%元来，深層学習は膨大な個数の学習データが必要であり，実用上の観点では学習データを集めることが困難な場合があった．それゆえ，少ないサンプルから珍しいオブジェクトを見つけることを目的とする few-shot 物体検出の開発が進められている。
+%few-shot 学習の方法としてはメタ学習が有望と見られてきたが，このTFAはそれまで注目されてこなかった fine-tuning に焦点をあてることで大きな性能向上をもたらした．
+%最終層のみ fine-tuning することが few-shot 物体検出にとって重要であることを発見し，それを用いた Two-stage Fine-tuning Approach (TFA)を提案した．
+%メタ学習の従来手法よりも 2〜20ポイント高い精度を出している．ただし，少数サンプルの分散が大きいと信頼性が低下すると言われている．
+%ベースとなる検出モデルは，Faster R-CNN がそのまま使われている．本手法はネットワーク構造には殆ど依存せず，few-shot 学習方法に特徴がある．
 
 \begin{figure}[tb]
     \begin{center}
@@ -471,15 +486,13 @@ few-shot 学習の方法としてはメタ学習が有望と見られてきた�
     \caption{ TFA の Few-shot fine-tuning (2nd stage)．}
     \label{fig:archi_TFA}
 \end{figure}
-\noindent{\bf Two-stage fine-tuning approach (TFA) の学習:\ } 
-\begin{enumerate}
-    \item Base model training (1st stage) \\
-    特徴抽出器$\mathcal{F}$と box 予測器(分類器, 回帰器)をbaseクラスの学習セット $C_{\rm b}$ で学習する．そのときの損失関数はFaster R-CNN \cite{RHGS15}と同じ $$L=L_{\rm rpn}+L_{\rm cls}+L_{\rm loc}$$を用いる．$L_{\rm rpn}$ はRPNの出力に適用され，前景を背景から区別し，anchorを学習データに近づける．$L_{\rm cls}$は box 分類器 C に対するクロスエントロピー損失，$L_{\rm loc}$は回帰器 R に対する平滑化L1損失である．
-    \item Few-shot fine-tuning (2nd stage) \\
-    バランスのとれた1クラスあたり $K$ shotsの学習セットを用意する．これらは base クラス $C_{\rm b}$ と novel クラス $C_{\rm n}$ を含む．Box 予測器の重みは乱数初期化する．特徴抽出器$\mathcal{F}$を固定してBox分類器と回帰器(検出モデルの最終層)をfine-tuningする．1st stage と同じ前記の損失関数 $L$ を用い，学習率は 1st stage から 20だけ減じる．また，2nd stage ではcosine 類似度を用いて分類器の損失を正規化する工夫を取り入れている．
-\end{enumerate}
-
-\subsubsection{Few-Shot Object Detection}
+%\noindent{\bf Two-stage fine-tuning approach (TFA) の学習:\ } 
+%\begin{enumerate}
+%    \item Base model training (1st stage) \\
+%    特徴抽出器$\mathcal{F}$と box 予測器(分類器, 回帰器)をbaseクラスの学習セット $C_{\rm b}$ で学習する．そのときの損失関数はFaster R-CNN \cite{RHGS15}と同じ $$L=L_{\rm rpn}+L_{\rm cls}+L_{\rm loc}$$を用いる．$L_{\rm rpn}$ はRPNの出力に適用され，前景を背景から区別し，anchorを学習データに近づける．$L_{\rm cls}$は box 分類器 C に対するクロスエントロピー損失，$L_{\rm loc}$は回帰器 R に対する平滑化L1損失である．
+%    \item Few-shot fine-tuning (2nd stage) \\
+%    バランスのとれた1クラスあたり $K$ shotsの学習セットを用意する．これらは base クラス $C_{\rm b}$ と novel クラス $C_{\rm n}$ を含む．Box 予測器の重みは乱数初期化する．特徴抽出器$\mathcal{F}$を固定してBox分類器と回帰器(検出モデルの最終層)をfine-tuningする．1st stage と同じ前記の損失関数 $L$ を用い，学習率は 1st stage から 20だけ減じる．また，2nd stage ではcosine 類似度を用いて分類器の損失を正規化する工夫を取り入れている．
+%\end{enumerate}
 
 \subsection{One-stage検出器}
 \subsubsection{YOLOv4}
@@ -1116,7 +1129,7 @@ NMS は物体検出における必須の手順であり，同一の物体に対�
 活性化関数として $$f(x) = x \tanh(\ln(1 + e^x))$$ を用いるものであり，$\pm\infty$ においてReLU関数に漸近する性質がある．使用する識別モデルによって結果は異なるが，CIFAR-10 及び ImageNet-1k に対する画像分類タスクに関して，ReLUやSwish\cite{RZL18}よりも好成績をおさめる場合がある．
 
 \subsection{損失関数}
-\noindent{\bf Distance-IoU (DIoU) 損失／Complete IoU (CIoU)損失} \cite{ZWLLYR20}．予測boxと目標boxとの正規化距離を用いた Distance-IoU (DIoU) 損失を提案（従来はL$n$損失等が使われることも多かった）．DIoU は IoU損失やGIoU損失より学習の収束が速い．さらに，追加でアスペクト比を直接損失に組み込んだ，収束が速く性能が良い Complete IoU (CIoU)損失を提案．DIoU と CIoU を，YOLOv3, SSD, Faster R-CNN に導入することで，性能を向上させることができる．DIoU は NMS に簡単に適用することができる．
+\noindent{\bf Distance-IoU (DIoU) 損失／Complete IoU (CIoU)損失} \cite{ZWLLYR20}．予測boxと目標boxとの正規化距離を用いた Distance-IoU (DIoU) 損失を提案（従来はL$n$損失等が使われることも多かった）．DIoU は IoU損失やGIoU損失より学習の収束が速い．さらに，追加でアスペクト比を直接損失に組み込んだ，収束が速く性能が良い Complete IoU (CIoU)損失を提案．DIoU と CIoU を，YOLOv3, SSD\cite{LAESRFB16}, Faster R-CNN に導入することで，性能を向上させることができる．DIoU は NMS に簡単に適用することができる．
 
 \noindent{\bf Label smoothing} \cite{SVISW16}．
 クロスエントロピー損失で学習する際に，正解ラベルを $q'(k|x){=}(1{-}\epsilon)\delta_{k,y}$ 
