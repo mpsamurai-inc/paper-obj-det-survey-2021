@@ -495,6 +495,7 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
 %\end{enumerate}
 
 \subsection{One-stage検出器}
+
 \subsubsection{YOLOv4}
 \begin{figure}[tb]
     \begin{center}
@@ -531,8 +532,32 @@ neck である Modified PAN は，Path Aggregation Network (PAN)(3つのピラ�
     \item[Self-adversarial-training (SAT)] まず，物体を写した元画像を改変し，物体が存在しない画像であると騙す画像を生成する．次に，この改変された画像中の物体を検出するように通常の学習を行う．
     \item[Cosine annealing scheduler] コサイン関数の半周期の形状を利用して，学習率を少しずつ減少させる．これを周期を増やしながら複数回繰り返す．
 \end{description}
+
 \subsubsection{EfficientDet}
-★ 執筆予定．
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=8cm,clip]{fig/archi_EfficientDet.eps}
+    \end{center}
+    %\capwidth=90mm %
+    \caption{ EfficientDet の構造．\ (Conv)はconvolutionを含む複合処理を表す．BiFPNは$D_{\rm bifpn}$段だけ反復する．赤い線の接続はスキップ接続(weighted residual connection (WRC))を示す．Class/box 予測は各レベル毎に実行されるが，重みは共通．}
+    \label{fig:archi_EfficientDet}
+\end{figure}
+2つの手法(マルチスケールの特徴量の融合を行わせる weighted bi-directional feature pyramid network (BiFPN)と，物体検出器の構造設計選択を系統的に行い効率性を向上させる最適化方法(compound scaling method))を提案し，これらの提案手法と EfficientNet backbone に基づき，物体検出器の新しい系列 (EfficientDet)を開発した\cite{TPL20}．
+
+EfficientDet D7 は，COCO test-dev に対して52.2 AP という最高性能を, 52Mパラメタ，325B FLOPs で達成(同じAPでの比較では，パラメタ数は従来よりも1/4〜1/9だけ小さく，処理時間は 1/13〜1/42 だけ少なくなる)．
+
+\noindent{\bf EfficientDetの構造:\ }
+backboneとして画像分類モデルの EfficientNet\cite{TanLe19} を用い，中間の特徴量の統合を BiFPN を多段に接続させたもので実行し，クラスとbboxの予測は RetinaNet\cite{LGGHD17}と同様の構造(全レベルで重みを共有)を採用した．
+
+BiFPN は $D_{\rm bifpn} ({=}3,{\cdots},8)$段に接続され，UpとDownの双方向の接続が何度も反復される．特徴量の統合は次式による fast normalized fusion と呼ぶ方法が使われている：
+$$ O = \sum_i\frac{w_i}{\epsilon + \sum_jw_j}\cdot I_i $$
+
+「backbone, BiFPN， box/class 予測ネットワーク」の，解像度，深さ，幅(チャネル数)等のモデルの規模を決めるパラメタを，1個の compound coefficient $\phi$ を用いて連動して変更させる．メモリ量と FLOPs の制約内で，accuracy を最大化するパラメタ数の配分を求め，それを保ちながらモデル規模を変更することができる．
+
+\noindent{\bf EfficientDetの学習:\ }
+SGDをモーメンタム=0.9，weight decay=$4e^{-5}$で実行．学習率は第1エポックは0から0.16まで線形に増加させ，その後cosineで減衰させるアニーリングを行う．活性化関数はswish，損失関数は focal loss を使用．
+
+%\noindent{\bf EfficientDetの推論処理:\ }
 
 \section{インスタンスセグメンテーション(Instance segmentation)}
 \begin{table*}
@@ -1068,15 +1093,15 @@ ImageNetデータセットでは同等以上の精度で計算量を20\%削減�
 PASCAL VOC-2012 semantic image segmentation task にて2016年当時の最高性能を達成．
 
 \subsection{特徴量の統合}
-\noindent{\bf Multi-input weighted residual connections (MiWRC)} \cite{TPL20}．PAN構造において，backbone側の各レベルの特徴量からトップダウン経路をスキップして出力側のもう一本のボトムアップ経路の同じレベルへのスキップ接続を設けること(\ref{fig:archi_wrc}の赤線で示された接続)．
-\begin{figure}[tb]
-    \begin{center}
-        \includegraphics[width=8cm,clip]{fig/archi_BiFPN,WRC.eps}
-    \end{center}
-    %\capwidth=90mm %
-    \caption{ Weighted Bi-directional Feature Pyramid Network (BiFPN)．赤線で示した接続が Multi-input weighted residual connections (MiWRC)．}
-    \label{fig:archi_wrc}
-\end{figure}
+\noindent{\bf Multi-input weighted residual connections (MiWRC)} \cite{TPL20}．PAN構造において，backbone側の各レベルの特徴量からトップダウン経路をスキップして出力側のもう一本のボトムアップ経路の同じレベルへのスキップ接続を設けること(\ref{fig:archi_EfficientDet}の赤線で示された接続)．
+%\begin{figure}[tb]
+%    \begin{center}
+%        \includegraphics[width=8cm,clip]{fig/archi_BiFPN,WRC.eps}
+%    \end{center}
+%    %\capwidth=90mm %
+%    \caption{ Weighted Bi-directional Feature Pyramid Network (BiFPN)．赤線で示した接続が Multi-input weighted residual connections (MiWRC)．}
+%    \label{fig:archi_wrc}
+%\end{figure}
 
 \noindent{\bf Scale-wise Feature Aggregation Module (SFAM)} \cite{ZSWTCCL19} の処理手順:
 \begin{enumerate}
@@ -1316,7 +1341,7 @@ PR曲線をもとに precision の平均を求めたものが，ほぼ average p
 $$ P_{\rm interp}(R) = \max_{\tilde{R}:\tilde{R}{\geq}R} P(\tilde{R}). $$
 この式は，その $R$ より右側の $P(R)$ の最大値を値として持つという意味であり，ちょうど左上から水を流して水たまりの水面を表すと考えてよい(\ref{fig:PRinterp}の黄色の線)．APはこの $P_{\rm interp}(R)$ の下の領域の面積として定義される．
 
-そもそも precision と recall は背反する関係にあるため，曲線全体では，閾値を調整してどちらかを増やそうとするともう一方が減少する．しかしながら，狭い範囲ではガタガタしており，もし $R$ (recall) を増加させることで $P(R)$ (precision) も増加するときには増加したところを採用すべきという解釈である\cite{MRS09}．
+そもそも precision と recall は背反する関係にあるため，曲線全体では，閾値を調整してどちらかを増やそうとするともう一方が減少する．しかしながら，狭い範囲ではガタガタしており，もし $R$ (recall) を増加させることで $P(R)$ (precision) も増加するときには増加したところを採用してAPを計算すべきという解釈である\cite{MRS09}．
 
 APの計算方法には，次の2つの計算方法がある：
 
@@ -1349,7 +1374,7 @@ $$ \mbox{mAP} = \frac{1}{N} \sum^N_{i{=}1} \mbox{AP}_i. $$
 \begin{biography}
     %\profile*{m}{著者姓 名}{前掲\kern-.5zw (Vol.X，No.Y，p.Z)\kern-.5zw 参照．}
 \profile{m}{金子 純也}{著者1の略歴}
-\profile{m}{山田 貢己}{1989年東京大学大学院物理学専攻修了．理学博士．同年株式会社東芝入社．ニューラルネットワークの研究開発，セキュリティ技術，画像認識技術，テレビの高画質化技術，車載画像認識プロセッサ等の開発業務に従事．2020年ジャパニアス株式会社に入社．現在，Morning Project Samurai 株式会社においてAI開発業務に従事．}
+\profile{m}{山田 貢己}{1989年東京大学大学院物理学専攻修了．理学博士．同年株式会社東芝入社．ニューラルネットワークの研究開発，セキュリティ技術，画像認識技術，テレビの高画質化技術，車載画像認識プロセッサ等の開発業務に従事．2020年ジャパニアス株式会社に入社．2020年7月から2021年3月まで，Morning Project Samurai 株式会社においてAI開発業務に従事．}
 \end{biography}
 
 \end{document}
