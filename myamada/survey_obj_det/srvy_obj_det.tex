@@ -18,7 +18,6 @@
 \usepackage{newpxtext}
 \usepackage[sc]{mathpazo}
 %\usepackage{otf} % これを指定すると IPAexフォントが埋め込まれなくなる．原因不明．
-%\usepackage[dvipdfmx]{graphicx}
 \usepackage[dvipdfmx]{graphicx,xcolor}
 \usepackage{graphics}
 \usepackage{fancybox}
@@ -43,9 +42,6 @@
     \Large 最新モデルのサーベイと目的に応じたモデルの選択 \\
     Neural Network Models for Object Detection \\
     \large A Survey of the Latest Models and Optimal Model Selections for Specific Tasks}
-%\author{金子 純也\thanks{MPS} \and 山田 貢己\thanks{JNA}}
-%\author{金子 純也 \\ Morning Project Samurai 株式会社 \and 山田 貢己 \\ JNA}
-%\author{金子 純也 \qquad 山田 貢己 \\ Junya Kaneko \qquad Miki Yamada \\ Morning Project Samurai 株式会社}
 \author{金子 純也 \hspace{15mm} 山田 貢己 \\ Junya Kaneko \qquad Miki Yamada \\ Morning Project Samurai 株式会社}
 \date{2021年3月31日}
 \maketitle
@@ -83,17 +79,13 @@ The structures of the models described here are drawn in the same way as possibl
     \end{center}
 \end{table*}
 
-%■ 本論文の目的：誰(理工系大学２年生)を対象に、何(物体検出の始め方)を伝えるか
-%\subsubsection*{この論文の狙い}
+%■ 本論文の目的：誰を対象に、何(物体検出の始め方)を伝えるか
 \subparagraph{この論文の狙い} 物体検出(object detection)に関する情報を簡潔に纏めたものである．物体検出でできること，必要になるもの，最新の物体検出モデルについて記載した．
-%また，読者にとっての理想的なサーベイ(即時性，分かりやすさ，一言で説明，参考文献は充実)というものの一つの解として，随時更新されるGitHub上の(日本語で書かれた)物体検出まとめサイトとライブラリを紹介する．
-%本論文で引用したライブラリ及び最新情報等は，(★GitHubアドレスを記載)にある．
 
 物体検出についての本格的な最近のサーベイは文献\cite{JZLYLFQ19}に詳しい．
 
 %■ 最近の世の中の状況のおさらい
 \subparagraph{世の中の状況} 
-%近年，「AI(人工知能)」という言葉が国内外に蔓延しており，技術者のみならず一般の人の日常生活にもすっかり浸透した．常に手の届くところにAIがあり，AIに囲まれて生活していると言っても過言ではない．テレビやインターネットの画像は，本物と見間違えるほどの人工画像で溢れ，スマホや机上のスピーカーに話しかけるとあらゆる情報を教えてくれるばかりでなく，電化製品を操作することもできるようになった．高速道路を自動運転する車も増えている．
 今や，日常的にAIに囲まれて生活していると言っても過言ではなく，インターネット上の画像は本物と見まごうばかりの人工画像で溢れ，スマホに話しかけるとあらゆる情報を教えてくれるばかりか，電化製品を操作することもできる．自動運転車も増えてきている．
 
 %■ AI分野(画像認識分野)における物体検出の位置づけ
@@ -141,11 +133,6 @@ The structures of the models described here are drawn in the same way as possibl
     もともとしたかったことを明確化して，物体検出の必要性を確認しておく．
 \end{description}
 
-%■ 良いサーベイとは(即時性、分かりやすさ、一言で説明＋参考文献)(随時更新する)まとめサイトとライブラリ(GitHub)の紹介。
-%\subparagraph{理想的なサーベイとは}最新技術のサーベイ論文は，有用であり様々な分野で昔から(論文雑誌が生まれた頃から)活用されていると思われる．しかしながら，進歩の速い分野においてはサーベイが出た頃には既に内容が古くなってしまっているという問題が往々にして起こる．また，とても良く書かれたサーベイほど内容が濃く多くなり，執筆に時間と労力を要するのはもちろん，それを読み解くのにも時間を要するということもよくある．
-
-%我々は，github上に随時更新される形式でサーベイを公開することを試みた．出版されたときには既に古くなっているという懸念を取り払える可能性を期待している．また，この分野に新規参入しようとしている人がなるべく短時間で必要な情報にたどり着き，取り組んでいる問題を解決する最適な方法を見つけたり，或いは，新たな研究に取り組めることを目指し，内容の拡充性や緻密性よりも，なるべく視覚的に解りやすいコンパクトな内容になるよう心掛けた．
-
 \section{目的に応じたモデルの選択}
 \subsection{物体検出(Object detection)と Segmentation(表\ref{tbl-select-l})}
 \noindent{\bf 物体検出のみ}を行わせる場合は，YOLOv4(高速で軽量) \cite{BWL20}, EfficientDet(検出精度が高い) \cite{TPL20}等の物体検出器(object detector)を使用すればよい．
@@ -161,9 +148,6 @@ The structures of the models described here are drawn in the same way as possibl
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
-        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
-        %\begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
         \begin{tabularx}{\linewidth}{XcXp{7cm}X} \toprule
             \centering{モデル名称[文献]} & \centering{発行年} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
@@ -260,13 +244,11 @@ The structures of the models described here are drawn in the same way as possibl
 
 \section{物体検出(object detection)}
 \begin{table*}
-%\begin{threeparttable*}
     \caption{物体検出のための主なニューラルネットワークモデル (1)(Segmentationなし)．}
     \label{tbl-cheat1}
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
         %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{XcXp{7cm}X} \toprule
             \centering{モデル名称[文献]} & \centering{発行年} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
@@ -310,7 +292,6 @@ The structures of the models described here are drawn in the same way as possibl
                 \item Fast R-CNNを大きく改良したものであり，Two-stage 検出モデルの基準となっている．
                 \item 画像ピラミッドの代わりに複数サイズの anchor box を用いて複数サイズの物体を検出．
                 \item まずRPNだけをend-to-endで学習．次に全体を学習．
-            %\end{itemize}\vspace{0.5\baselineskip} & 高速で検出性能が高い． \\ 
             \end{itemize}
             &
             \begin{itemize}
@@ -385,13 +366,10 @@ The structures of the models described here are drawn in the same way as possibl
             \end{itemize}
             \\
             \bottomrule
-            %\footnotetext{テスト} 使えない
              &  &  & *1\ (o) : one-stage 検出器\quad *2\ (t) : two-stage 検出器 &  \\
         \end{tabularx}
-        %\footnotetext{テスト} 使えない
     \end{center}
 \end{table*}%
-%\end{threeparttable*}%
 
 \subsection{物体検出器(object detector)の働き}
 物体検出(及び instance segmentaion)の処理内容を簡潔に纏めておく．
@@ -403,15 +381,12 @@ The structures of the models described here are drawn in the same way as possibl
 
 \subparagraph{事前学習(pre-training)と事後学習(post-training, fine-tuning)}世界最高性能を出すほどの大規模な検出器の学習は，たいてい事前学習と事後学習の2段階で行われる．事前学習は主に公開データベースなどの大量データを用いて検出器の前半部分を学習させて適切な内部表現を獲得するために行われる．検出器によっては事前学習済みの重み係数パラメタが公開されているものもある．事後学習は，最終目的に合致したデータを追加して，場合によっては検出器の最終層を追加して，所望の検出処理を実行できるように最終調整の意味合いで実施するものである．事前/事後学習のやり方は各検出器によって異なるため，論文等に記された方法を参考にして実行する必要がある．
 
-%\noindent{\bf Two-stage 検出器と one-stage 検出器:\ }
 物体検出器は構造の違いにより次の2種類に分類できる\cite{JZLYLFQ19}：
 \begin{description}
     \item[Two-stage 検出器] 高い位置決め精度と物体認識精度をもつ(Faster R-CNN など)．最初のCNNベースの物体検出器 R-CNN とその改良手法はこの方式である．次の2つのstageで処理される：
-    %\begin{description}
     \begin{itemize}
         \item 第1 stage: 物体の bbox の候補を選出する．Faster R-CNN では Region Proposal Network (RPN) と呼ばれるものが担当する．
         \item 第2 stage: RoI Pooling が各候補bboxから特徴量を切り出し，後続の分類器(classifier)と bbox 回帰器(regressor)がそれを処理する．
-    %\end{description}
     \end{itemize}
     \item[One-stage 検出器] 推論速度が高速である(YOLO\cite{RedFar18,BWL20}, SSD\cite{LAESRFB16} など)．Region proposal をせずに直接，入力画像から bbox を検出して出力する．近年では，改良により検出精度も最高性能を達成している．
 \end{description}
@@ -447,14 +422,6 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
     \item RPN固定で全体を学習する．RPNのRoI出力を全体の出力及びRoI poolingへ送り，特徴抽出器で分類と回帰の共通部分のFC計算を行う．分類器はクロスエントロピー，softmax などで計算し，回帰器が行う線形回帰はL1ノルムで学習し，bboxの位置の補正を行う．
 \end{enumerate}
 
-%\subsubsection{Two-Stage Fine-Tuning Approach (TFA)}
-%Few-shot 物体検出のためのシンプルな two-stage の fine-tuning法である\cite{WHGDY20}．
-%元来，深層学習は膨大な個数の学習データが必要であり，実用上の観点では学習データを集めることが困難な場合があった．それゆえ，少ないサンプルから珍しいオブジェクトを見つけることを目的とする few-shot 物体検出の開発が進められている。
-%few-shot 学習の方法としてはメタ学習が有望と見られてきたが，このTFAはそれまで注目されてこなかった fine-tuning に焦点をあてることで大きな性能向上をもたらした．
-%最終層のみ fine-tuning することが few-shot 物体検出にとって重要であることを発見し，それを用いた Two-stage Fine-tuning Approach (TFA)を提案した．
-%メタ学習の従来手法よりも 2〜20ポイント高い精度を出している．ただし，少数サンプルの分散が大きいと信頼性が低下すると言われている．
-%ベースとなる検出モデルは，Faster R-CNN がそのまま使われている．本手法はネットワーク構造には殆ど依存せず，few-shot 学習方法に特徴がある．
-
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_TFA.eps}
@@ -463,13 +430,6 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
     \caption{ TFA の Few-shot fine-tuning (2nd stage)．Feature extractor F (水色の部分) を固定して，Novel shots を入れた学習データで FC サブネット(クラス/回帰)を fine tuning する．}
     \label{fig:archi_TFA}
 \end{figure}
-%\noindent{\bf Two-stage fine-tuning approach (TFA) の学習:\ } 
-%\begin{enumerate}
-%    \item Base model training (1st stage) \\
-%    特徴抽出器$\mathcal{F}$と box 予測器(分類器, 回帰器)をbaseクラスの学習セット $C_{\rm b}$ で学習する．そのときの損失関数はFaster R-CNN \cite{RHGS15}と同じ $$L=L_{\rm rpn}+L_{\rm cls}+L_{\rm loc}$$を用いる．$L_{\rm rpn}$ はRPNの出力に適用され，前景を背景から区別し，anchorを学習データに近づける．$L_{\rm cls}$は box 分類器 C に対するクロスエントロピー損失，$L_{\rm loc}$は回帰器 R に対する平滑化L1損失である．
-%    \item Few-shot fine-tuning (2nd stage) \\
-%    バランスのとれた1クラスあたり $K$ shotsの学習セットを用意する．これらは base クラス $C_{\rm b}$ と novel クラス $C_{\rm n}$ を含む．Box 予測器の重みは乱数初期化する．特徴抽出器$\mathcal{F}$を固定してBox分類器と回帰器(検出モデルの最終層)をfine-tuningする．1st stage と同じ前記の損失関数 $L$ を用い，学習率は 1st stage から 20だけ減じる．また，2nd stage ではcosine 類似度を用いて分類器の損失を正規化する工夫を取り入れている．
-%\end{enumerate}
 
 \subsection{One-stage検出器}
 
@@ -477,7 +437,6 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_YOLOv4.eps}
-        %\includegraphics[width=8cm,clip]{fig/testYOLO.eps}
     \end{center}
     %\capwidth=90mm %
     \caption{ YOLOv4 の構造．青い直方体は中間データを表し，矢印は処理を表す．}
@@ -546,7 +505,6 @@ SGDを momentum=0.9，weight decay=$4e^{-5}$で実行．学習率は第1エポ�
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
         %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{XcXp{7cm}X} \toprule
             \centering{モデル名称[文献]} & \centering{発行年} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
@@ -614,15 +572,6 @@ SGDを momentum=0.9，weight decay=$4e^{-5}$で実行．学習率は第1エポ�
             \end{itemize}
             \\
 
-            %Panoptic Segmentation & \cite{KHGRD19} & Panoptic Segmentation & 
-            %\begin{itemize}
-            %    \vspace{-0.7\baselineskip}
-            %    \setlength{\leftskip}{-3mm}
-            %    \item 画像の全画素に対してクラス分類を行い，且つ，物体に関しては個体を区別して画素単位で識別する．
-            %    \item semantic 及び instance segmentation を独立に作用させて処理可能．
-            %\end{itemize}
-            %&
-            %\\
             \bottomrule
             &  &  & *1\ (o) : one-stage 検出器\quad *2\ (t) : two-stage 検出器 &  \\
         \end{tabularx}
@@ -632,7 +581,6 @@ SGDを momentum=0.9，weight decay=$4e^{-5}$で実行．学習率は第1エポ�
 \subsection{Mask Scoring R-CNN (MS R-CNN) \cite{HHGHW19}}
 マスク品質(インスタンスマスクと正解マスクとのIoUとして定量化されるもの)を分類スコアと明示的に関連付けたモデルである．MS R-CNN は，予測マスクの品質を学習するためのブロック(MaskIoU head)を，Mask R-CNN\cite{HGDG17} に導入したモデルになっている(図\ref{fig:archi_ms_rcnn})．MaskIoU headはインスタンスの特徴量と対応する予測マスクを一緒に取り込み，それを元にMask IoU を回帰推定する．そして，推論時にこの予測MaskIoUを分類スコアに掛け算して補正する．
 \subsubsection{MS R-CNN の学習}
-%\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
 \begin{figure}[h]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_ms_rcnn.eps}
@@ -657,7 +605,6 @@ MaskIoU Head は分類スコア(R-CNN head の出力)の調整に使う．推論
 \end{enumerate}
 
 \subsection{YOLACT++ \cite{BZXL20}}
-%\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_YOLACT++.eps}
@@ -675,8 +622,6 @@ Class 信頼度は分類損失(クロスエントロピー)，bbox はL1損失�
 
 Semantic segmentation 損失は，学習時のみ接続されるネットワークの学習であり，この学習の実施によりmAPが0.4ポイント向上する．P3特徴量出力に 1{$\times$}1 convolution 1層で処理してcチャネルの出力をさせて最後にシグモイド関数をかける．これが正解 mask になるように学習する．
 
-%これにより，各画素にc個の[0,1]出力が割り当てられる．
-% (おそらく，pixel-wise binary cross entropy 損失と予想)
 \subsubsection{YOLACT++ の推論処理}
 Prediction head が各 anchor のクラス信頼度，bbox，k 個の mask 係数を出力し，
 Protonet が k 個の Prototype (mask) を出力する．
@@ -692,7 +637,6 @@ Protonet が k 個の Prototype (mask) を出力する．
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
         %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{XcXp{7cm}X} \toprule
             \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
@@ -872,7 +816,6 @@ Protonet が k 個の Prototype (mask) を出力する．
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
         %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{XcXp{7cm}X} \toprule
             \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
@@ -1036,16 +979,6 @@ Protonet が k 個の Prototype (mask) を出力する．
                 \item 同じ性能に至るまでのepoch数が1/2以下で済む．
             \end{itemize}
             \\
-
-            %Eliminate grid sensitivity
-            %& \cite{BWL20} & 予測性能の向上 (処理の安定化) & 
-            %\begin{itemize}
-            %    \vspace{-0.7\baselineskip}
-            %    \setlength{\leftskip}{-3mm}
-            %    \item 各セルが守備範囲とする bbox 領域を，隣り合う同士が少し重なりを持つように設定することで，セル境界における検出動作を安定化させる．
-            %\end{itemize}
-            %&
-            %\\
             \bottomrule
         \end{tabularx}
     \end{center}
@@ -1064,14 +997,6 @@ PASCAL VOC-2012 semantic image segmentation task にて2016年当時の最高性
 
 \subsection{特徴量の統合}
 \subparagraph{Multi-input weighted residual connections (MiWRC)\cite{TPL20}} PAN構造において，backbone側の各レベルの特徴量からトップダウン経路をスキップして出力側のもう一本のボトムアップ経路の同じレベルへのスキップ接続を設けること(図\ref{fig:archi_EfficientDet}の赤線で示された接続)．
-%\begin{figure}[tb]
-%    \begin{center}
-%        \includegraphics[width=8cm,clip]{fig/archi_BiFPN,WRC.eps}
-%    \end{center}
-%    %\capwidth=90mm %
-%    \caption{ Weighted Bi-directional Feature Pyramid Network (BiFPN)．赤線で示した接続が Multi-input weighted residual connections (MiWRC)．}
-%    \label{fig:archi_wrc}
-%\end{figure}
 
 \noindent{\textsf{Scale-wise Feature Aggregation Module (SFAM)}} \cite{ZSWTCCL19} の処理手順:
 \begin{enumerate}
@@ -1152,16 +1077,12 @@ DropOut\cite{SHKSS14} は学習時に毎回ランダムに $\alpha$ $(0\leq\alph
 \subsection{学習の高速化}
 \subparagraph{SGDR (Cosine annealing scheduler) \cite{LoshHut17}．} \label{sec:cos} コサイン関数の形状を利用して SGD (Stochastic gradient descent) の学習率を少しずつ減少させる．そして周期的に SGD の warm restart をして，restartの回を追う毎に再開時の学習率を徐々に小さく，周期を徐々に大きくするようにスケジューリングする．Warm reatart付きのSGDは，従来法に比べて，同じ性能に至るまでのepoch数が1/2から1/4で済む．
 
-%\subsection{その他}
-%\subparagraph{Eliminate grid sensitivity\cite{BWL20}．} 各セルが守備範囲とする bbox 領域を，隣り合うセルのbbox領域が互いに少し重なりを持つように設定することで，セル境界における検出動作を安定化させる．
-
 \section{むすび}
 物体検出とその関連技術について入門者向けのサーベイを行った．物体検出と instance segmentation の主なモデルを紹介し，それらに対して用いられる関連技術について説明した．新たに物体検出を始めようとしている人がなるべく早く目的地にたどり着けることを目指したため，研究の歴史については記載を省略した．
 
 \section*{謝辞}
 ---
 
-%\small
 \footnotesize
 \bibliography{mps}
 %\bibliographystyle{jsai}
@@ -1180,7 +1101,6 @@ DropOut\cite{SHKSS14} は学習時に毎回ランダムに $\alpha$ $(0\leq\alph
 \begin{figure}[tb]
     \centering
     \includegraphics[width=7cm,clip]{fig/IoU.eps}
-    %\capwidth=70mm % 標準のLaTeXでは使えない
     \caption{ IoU (Intersection over Union). Bbox の一致の程度をIoU ($0{\leq}\mbox{IoU}{\leq}1$)で測る．}
     \label{fig:IoU}
 \end{figure}
@@ -1190,13 +1110,6 @@ IoUは bbox の一致の程度の指標であり，推定(predicted) bboxが教�
 IoUが閾値より小さい場合，または，クラスを間違えている場合は，誤った検出(誤検出)という．
 
 \subsection{適合率(precision)と再現率(recall)}
-% 元ファイルは Google Sheets なので，一応それをExcelに変換したファイルを fig/ に置いておく（体裁が乱れているが）．
-%\begin{figure}[tb]
-%    \centering
-%    \includegraphics[width=5cm,clip]{fig/confusion_matrix.eps}
-%    \caption{ 混同行列 (confusion matrix). }
-%    \label{fig:ConMat}
-%\end{figure}
 \begin{table}
     \caption{ 混同行列 (confusion matrix)．}
     \label{tbl-confuse}
@@ -1232,16 +1145,12 @@ IoUが閾値より小さい場合，または，クラスを間違えている�
 適合率，再現率はモデルの評価指標であり，両者はトレードオフの関係にある．構築したモデルの良し悪しをどちらを基準に評価するかは，モデルの利用目的に合わせて判断する必要がある．
 
 \subsection{PR曲線(Precision-Recall Curve)}
-%\begin{figure}[h]
 \begin{figure}[tb]
     \centering
         \includegraphics[width=2.5cm,clip]{fig/pics_cat-1.eps}
-        %\hspace{14mm}
-        %\qquad \qquad
         \includegraphics[width=2.5cm,clip]{fig/pics_cat-2.eps}
         \includegraphics[width=2.5cm,clip]{fig/pics_cat-3.eps}\\
         (a) \hspace{20mm} (b) \hspace{20mm} (c)
-    %\capwidth=90mm %
     \caption{ Bounding box の例(猫の検出)．(画像は https://unsplash.com/photos/Eoth0QkgT4I のものを使用．)}
     \label{fig:cat}
 \end{figure}
@@ -1292,19 +1201,11 @@ PR曲線とは，確信度の閾値を変化させて (再現率，適合率) �
         \bottomrule
     \end{tabular}
 \end{table}%
-%\begin{figure}
-%    \centering
-%    \includegraphics[width=7cm,clip]{fig/PR_Curve.eps}
-%    %\capwidth=90mm %
-%    \caption{ $PR$曲線．}
-%    \label{fig:PR}
-%\end{figure}
 
 \subsection{AP と mAP}
 \begin{figure}
     \centering
     \includegraphics[width=7cm,clip]{fig/PR_interp.eps}
-    %\capwidth=90mm %
     \caption{ PR曲線(青)とそれに対応する$P_{\rm interp}(R)$(黄)．}
     \label{fig:PRinterp}
 \end{figure}
@@ -1321,14 +1222,12 @@ $$ \mbox{AP}_{\rm all} = \int_0^1 P_{\rm interp}(R) {\rm d}R. $$
 
 \noindent{\bf 11-point interpolation AP}はPR曲線を \{0, 0.1, 0.2, $\cdots$, 1.0\} の11個のrecallレベルでのprecisionで代表させ，それらの平均値を計算したものである(図\ref{fig:PR11})：
 $$ \mbox{AP}_{11} = \frac{1}{11} \sum_{R\in\{0, 0.1, 0.2, \cdots, 1.0\}} P_{\rm interp}(R). $$
-%$$ \mbox{AP}_{11} = \frac{1}{11} \sum_{R\in\{0\}}$$
 \begin{figure}
     \centering
     \includegraphics[width=7cm,clip]{fig/PR_11.eps}
     \caption{ $P_{\rm interp}$曲線(11点の代表点による)．}
     \label{fig:PR11}
 \end{figure}
-%\capwidth=90mm %
 
 \subparagraph{AP50, AP75, AP@[.50:.05:.95]．} APの値はIoUの閾値に依存する．閾値$X$を指定したAPはしばしばAP$X$と記される．AP50は IoU=.50，AP75はIoU=.75を表す．
 AP@[.50:.05:.95]は，ステップサイズを0.05とし，IoU=.50からIoU=.95までのそれぞれのIoU閾値で算出したAPの平均を計算したものである．単に AP と書いた場合，この AP@[.50:.05:.95] を表す場合があるので注意が必要である．

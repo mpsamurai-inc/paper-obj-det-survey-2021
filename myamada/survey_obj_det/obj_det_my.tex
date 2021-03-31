@@ -1,7 +1,4 @@
 % ビルドメモ
-% bibtex では、うまくいかない。
-% jbibtex はインストールされていない。
-% pbibtex を使うと旨くいく。
 % 次の手順でうまくいく。
 % $ platex template-j
 % $ pbibtex template-j
@@ -53,11 +50,9 @@
 
 \Vol{12}
 \No{1}
-%\jtitle{物体検出のためのニューラルネットワークのサーベイ}
 \jtitle{物体検出に用いられるニューラルネットワークモデル}
 % \jtitle[柱用和文タイトル]{和文タイトル}
 \jsubtitle{最新モデルのサーベイと目的に応じたモデルの選択}
-%\etitle{A Survey of Deep Neural Networks for Object Detection}
 \etitle{Neural Network Models for Object Detection}
 \esubtitle{A Survey of the Latest Models and Optimal Model Selections for Specific Tasks}
 
@@ -108,21 +103,6 @@
 
 \section{まえがき}
 
-%\begin{table*}
-%    \caption{物体検出のモデル選択．}
-%    \label{tbl-select-h}
-%    \begin{center}
-%        %\begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
-%        \begin{tabularx}{\linewidth}{|p{1.3cm}|p{1.0cm}|X|X|X|} \hline
-%        %\begin{tabular}{|l|c|c|c|} \hline
-%            \multicolumn{2}{|c|}{} & \multicolumn{3}{c|}{画素毎のクラス分類} \\ \cline{3-5}
-%            \multicolumn{2}{|c|}{} & \centering{全画素} & \centering{物体領域のみ} & \multicolumn{1}{c|}{しない} \\ \hline
-%           \multirow{3}{*}{物体検出} & \multirow{2}{*}{する} & Panoptic segmentation \cite{KHGRD19} & Instance segmentation ( YOLACT++ \cite{BZXL20}，MS R-CNN \cite{HHGHW19} など ) & 物体検出 ( YOLOv4 \cite{BWL20}, EfficientDet \cite{TPL20} など ) \\ \cline{2-5}
-%             & しない & Semantic segmentation & \centering{---} & \multicolumn{1}{c|}{---} \\ \hline
-%        %\end{tabular}
-%        \end{tabularx}
-%    \end{center}
-%\end{table*}
 \begin{table*}
     \caption{物体検出に関連するニューラルネットワークモデルの分類．}
     \label{tbl-select-l}
@@ -216,8 +196,6 @@
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
-        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
@@ -305,14 +283,11 @@
 
 \section{物体検出(Object detection)}
 \begin{table*}
-%\begin{threeparttable*}
     \caption{物体検出のための主なニューラルネットワークモデル（１）(Segmentationなし)．}
     \label{tbl-cheat1}
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
-        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
@@ -410,13 +385,10 @@
             \end{itemize}
             \\
             \bottomrule
-            %\footnotetext{★テスト} 使えない
              &  &  & *1\ (t) : two-stage 検出器\quad *2\ (o) : one-stage 検出器 &  \\
         \end{tabularx}
-        %\footnotetext{★テスト} 使えない
     \end{center}
 \end{table*}%
-%\end{threeparttable*}%
 
 \subsection{物体検出器(object detector)の働き}
 \noindent{\bf 基本動作:\ }物体検出器は，画像(1枚の静止画をファイルにしたもの)を処理し，処理結果(検出個数，検出物体の画像座標，検出物体の種類)を出力する．セグメンテーションの場合は，出力解像度(画像のサイズ)に応じた各画素のクラス分類結果も出力される．画像を読み込ませる際には，幅と高さを含む情報も与える必要がある．検出器によっては画像サイズや画像ファイル形式が指定されているものもあるのでその場合は，予め画像ファイルを変換する前処理が必要となる．
@@ -427,15 +399,12 @@
 
 \noindent{\bf 事前学習(pre-training)と事後学習(post-training, fine-tuning):\ }世界最高性能を出すほどの検出器の学習は，たいてい事前学習と事後学習の2段階で行われる．事前学習は主に公開データベースなどの大量データを用いて検出器の前半部分を学習させて適切な内部表現を獲得するために行われる．検出器によっては事前学習済みの重み係数パラメタが公開されているものもある．事後学習は，最終目的に合致したデータを追加して，場合によっては検出器の最終層を追加して，所望の検出処理を実行できるように最終調整の意味合いで実施するものである．事前/事後学習のやり方は各検出器によって異なるため，説明書きや論文等に記された方法を参考にして実行する必要がある．
 
-%\noindent{\bf Two-stage 検出器と one-stage 検出器:\ }
 物体検出器は次の2種類に分類できる\cite{JZLYLFQ19}：
 \begin{description}
     \item[Two-stage 検出器] 高い位置決め精度と物体認識精度をもつ(Faster R-CNN など)．最初のCNNベースの物体検出器 R-CNN とその改良手法はこの方式である．次の2つのstageで処理される：
-    %\begin{description}
     \begin{itemize}
         \item 第1 stage: 物体の bbox の候補を選出する．Faster R-CNN では Region Proposal Network (RPN) と呼ばれている．
         \item 第2 stage: RoI Pooling が各候補boxから特徴量を切り出し，後続の分類器と bbox 回帰器がそれを処理する．
-    %\end{description}
     \end{itemize}
     \item[One-stage 検出器] 推論速度が高速である(YOLO, SSD\cite{LAESRFB16} など)．Region proposal をせずに直接，入力画像から bbox を検出して出力する．近年では，改良により検出精度も向上している．
 \end{description}
@@ -461,7 +430,7 @@ RPN は backbone が出力した特徴量をさらに CNN で処理して物体�
 
 RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposals を受け取り，bbox内部の特徴量を切り出して物体の大きさにかかわらずに空間サイズを 7{$\times$}7 の固定サイズに変換する．
 
-固定サイズの特徴量は，共通の特徴抽出を行う全結合(Full Connect)層(以下，FC層)により $n{\times}1024$のデータに変換され，分類器と回帰器に送られて別々のFC層で処理されて，クラス分類確率と bbox 調整量がそれぞれ出力される．(★bbox調整量が全クラス分出力されるのかどうか確認要！)
+固定サイズの特徴量は，共通の特徴抽出を行う全結合(Full Connect)層(以下，FC層)により $n{\times}1024$のデータに変換され，分類器と回帰器に送られて別々のFC層で処理されて，クラス分類確率と bbox 調整量がそれぞれ出力される．
 
 \noindent{\bf Faster R-CNN の学習:\ } 
 \begin{enumerate}
@@ -469,14 +438,6 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
     \item RPNだけをEnd-to-Endで学習．anchorと教師データに基づき，物体か背景か(物体らしさ，2k個)と，anchorからのずれ(4k個)を学習．
     \item RPN固定で全体を学習する．RPNのRoI出力を全体の出力及びRoI poolingへ送り，特徴抽出器で分類と回帰の共通部分のFC計算を行う．分類器はクロスエントロピー，softmax などで計算し，回帰器が行う線形回帰はL1ノルムで学習し，bboxの位置の補正を行う．
 \end{enumerate}
-
-%\subsubsection{Two-Stage Fine-Tuning Approach (TFA)}
-%Few-shot 物体検出のためのシンプルな two-stage の fine-tuning法である\cite{WHGDY20}．
-%元来，深層学習は膨大な個数の学習データが必要であり，実用上の観点では学習データを集めることが困難な場合があった．それゆえ，少ないサンプルから珍しいオブジェクトを見つけることを目的とする few-shot 物体検出の開発が進められている。
-%few-shot 学習の方法としてはメタ学習が有望と見られてきたが，このTFAはそれまで注目されてこなかった fine-tuning に焦点をあてることで大きな性能向上をもたらした．
-%最終層のみ fine-tuning することが few-shot 物体検出にとって重要であることを発見し，それを用いた Two-stage Fine-tuning Approach (TFA)を提案した．
-%メタ学習の従来手法よりも 2〜20ポイント高い精度を出している．ただし，少数サンプルの分散が大きいと信頼性が低下すると言われている．
-%ベースとなる検出モデルは，Faster R-CNN がそのまま使われている．本手法はネットワーク構造には殆ど依存せず，few-shot 学習方法に特徴がある．
 
 \begin{figure}[tb]
     \begin{center}
@@ -486,13 +447,6 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
     \caption{ TFA の Few-shot fine-tuning (2nd stage)．}
     \label{fig:archi_TFA}
 \end{figure}
-%\noindent{\bf Two-stage fine-tuning approach (TFA) の学習:\ } 
-%\begin{enumerate}
-%    \item Base model training (1st stage) \\
-%    特徴抽出器$\mathcal{F}$と box 予測器(分類器, 回帰器)をbaseクラスの学習セット $C_{\rm b}$ で学習する．そのときの損失関数はFaster R-CNN \cite{RHGS15}と同じ $$L=L_{\rm rpn}+L_{\rm cls}+L_{\rm loc}$$を用いる．$L_{\rm rpn}$ はRPNの出力に適用され，前景を背景から区別し，anchorを学習データに近づける．$L_{\rm cls}$は box 分類器 C に対するクロスエントロピー損失，$L_{\rm loc}$は回帰器 R に対する平滑化L1損失である．
-%    \item Few-shot fine-tuning (2nd stage) \\
-%    バランスのとれた1クラスあたり $K$ shotsの学習セットを用意する．これらは base クラス $C_{\rm b}$ と novel クラス $C_{\rm n}$ を含む．Box 予測器の重みは乱数初期化する．特徴抽出器$\mathcal{F}$を固定してBox分類器と回帰器(検出モデルの最終層)をfine-tuningする．1st stage と同じ前記の損失関数 $L$ を用い，学習率は 1st stage から 20だけ減じる．また，2nd stage ではcosine 類似度を用いて分類器の損失を正規化する工夫を取り入れている．
-%\end{enumerate}
 
 \subsection{One-stage検出器}
 
@@ -500,7 +454,6 @@ RoI Pooling は，backbone からの特徴量と RPN からの $n$個の proposa
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_YOLOv4.eps}
-        %\includegraphics[width=8cm,clip]{fig/testYOLO.eps}
     \end{center}
     %\capwidth=90mm %
     \caption{ YOLOv4 の構造．}
@@ -557,7 +510,6 @@ $$ O = \sum_i\frac{w_i}{\epsilon + \sum_jw_j}\cdot I_i $$
 \noindent{\bf EfficientDetの学習:\ }
 SGDをモーメンタム=0.9，weight decay=$4e^{-5}$で実行．学習率は第1エポックは0から0.16まで線形に増加させ，その後cosineで減衰させるアニーリングを行う．活性化関数はswish，損失関数は focal loss を使用．
 
-%\noindent{\bf EfficientDetの推論処理:\ }
 
 \section{インスタンスセグメンテーション(Instance segmentation)}
 \begin{table*}
@@ -566,8 +518,6 @@ SGDをモーメンタム=0.9，weight decay=$4e^{-5}$で実行．学習率は第
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
-        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{モデル名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
@@ -661,7 +611,6 @@ SGDをモーメンタム=0.9，weight decay=$4e^{-5}$で実行．学習率は第
 \end{table*}%
 
 \subsection{Mask Scoring R-CNN (MS R-CNN)}
-%\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_ms_rcnn.eps}
@@ -688,7 +637,6 @@ MaskIoU Head は分類スコア(R-CNN head の出力)の調整に使う．推論
 \end{enumerate}
 
 \subsection{YOLACT++}
-%\begin{figure*}[b] %これにすると独立したページに１段組で出力された.
 \begin{figure}[tb]
     \begin{center}
         \includegraphics[width=8cm,clip]{fig/archi_YOLACT++.eps}
@@ -704,8 +652,6 @@ Class 信頼度は分類損失(クロスエントロピー)，bbox はL1損失�
 
 Semantic Segmentation Loss は，学習時のみ接続されるネットワークの学習であり，この学習の実施によりmAPが0.4ポイント向上する．P3特徴量出力に 1×1 convolution 1層で処理してcチャネルの出力をさせて最後にシグモイド関数をかける．これが正解 mask になるように学習する．
 
-%これにより，各画素にc個の[0,1]出力が割り当てられる．
-% (おそらく，pixel-wise binary cross entropy 損失と予想)
 \subsubsection{YOLACT++ の推論処理}
 Prediction Head が各 anchor の Class 信頼度，bbox，k 個の mask 係数を出力し，
 Protonet が k 個の Prototype (mask) を出力する．
@@ -722,8 +668,6 @@ Protonet が k 個の Prototype (mask) を出力する．
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
-        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
@@ -902,8 +846,6 @@ Protonet が k 個の Prototype (mask) を出力する．
     \begin{center}
         \setlength{\tabcolsep}{3pt}
         \footnotesize
-        %\begin{tabular}{|c|c|c|} \hline
-        %\begin{tabular}{|c|p{2cm}|p{2cm}|} \hline
         \begin{tabularx}{\linewidth}{Xp{1.5cm}Xp{7cm}X} \toprule
             \centering{技術名称} & \centering{文献} & \centering{用途} & \centering{概要} & \multicolumn{1}{c}{特徴} \\ \midrule
 
@@ -1094,14 +1036,6 @@ PASCAL VOC-2012 semantic image segmentation task にて2016年当時の最高性
 
 \subsection{特徴量の統合}
 \noindent{\bf Multi-input weighted residual connections (MiWRC)} \cite{TPL20}．PAN構造において，backbone側の各レベルの特徴量からトップダウン経路をスキップして出力側のもう一本のボトムアップ経路の同じレベルへのスキップ接続を設けること(\ref{fig:archi_EfficientDet}の赤線で示された接続)．
-%\begin{figure}[tb]
-%    \begin{center}
-%        \includegraphics[width=8cm,clip]{fig/archi_BiFPN,WRC.eps}
-%    \end{center}
-%    %\capwidth=90mm %
-%    \caption{ Weighted Bi-directional Feature Pyramid Network (BiFPN)．赤線で示した接続が Multi-input weighted residual connections (MiWRC)．}
-%    \label{fig:archi_wrc}
-%\end{figure}
 
 \noindent{\bf Scale-wise Feature Aggregation Module (SFAM)} \cite{ZSWTCCL19} の処理手順:
 \begin{enumerate}
@@ -1141,7 +1075,6 @@ SAM は，チャネル方向に global max pooling と global average pooling �
 
 \subsection{Non-maximum suppression (NMS)}
 NMS は物体検出における必須の手順であり，同一の物体に対して微妙に異なる位置に検出された複数の検出候補を，1個の検出結果に集約する処理である．
-(★これの標準的手順ってどうやるんだっけ？物体らしさとクラス確率のどっちを使うんだっけ？文献はどれ？⇨MPSの説明資料でNMSについて書いたときにそこに書いたような記憶がある.小林さん？)
 
 \noindent{\bf Soft-NMS (non-maximum suppression)} \cite{BSCD17}．一部重なっている2つ以上のbboxのIoUが閾値を超えている場合，bbox候補を削除する代わりに，そのスコアにペナルティを与える．IoUとスコアの両方を考慮することにより，近接した物体に対する検出性能を向上させる．
 
@@ -1219,13 +1152,6 @@ IoUが閾値より小さい場合，または，クラスを間違えている�
 
 
 \subsection{適合率(precision)と再現率(recall)}
-% 元ファイルは Google Sheets なので，一応それをExcelに変換したファイルを fig/ に置いておく（体裁が乱れているが）．
-%\begin{figure}[tb]
-%    \centering
-%    \includegraphics[width=5cm,clip]{fig/confusion_matrix.eps}
-%    \caption{ 混同行列 (confusion matrix). }
-%    \label{fig:ConMat}
-%\end{figure}
 \begin{table}
     \caption{ 混同行列 (confusion matrix)．}
     \label{tbl-confuse}
@@ -1261,12 +1187,9 @@ IoUが閾値より小さい場合，または，クラスを間違えている�
 適合率，再現率はモデルの評価指標であり，両者はトレードオフの関係にある．構築したモデルの良し悪しをどちらを基準に評価するかは，モデルの利用目的に合わせて判断する必要がある．
 
 \subsection{PR曲線(Precision-Recall Curve)}
-%\begin{figure}[h]
 \begin{figure}[tb]
     \centering
         \includegraphics[width=2.5cm,clip]{fig/pics_cat-1.eps}
-        %\hspace{14mm}
-        %\qquad \qquad
         \includegraphics[width=2.5cm,clip]{fig/pics_cat-2.eps}
         \includegraphics[width=2.5cm,clip]{fig/pics_cat-3.eps}\\
         (a) \hspace{20mm} (b) \hspace{20mm} (c)
@@ -1321,13 +1244,6 @@ PR曲線とは，確信度の閾値を変化させて (再現率，適合率) �
         \bottomrule
     \end{tabular}
 \end{table}%
-%\begin{figure}
-%    \centering
-%    \includegraphics[width=7cm,clip]{fig/PR_Curve.eps}
-%    %\capwidth=90mm %
-%    \caption{ $PR$曲線．}
-%    \label{fig:PR}
-%\end{figure}
 
 \subsection{AP と mAP}
 \begin{figure}
@@ -1350,7 +1266,6 @@ $$ \mbox{AP}_{\rm all} = \int_0^1 P_{\rm interp}(R) {\rm d}R. $$
 
 \noindent{\bf 11-point interpolation AP}はPR曲線を \{0, 0.1, 0.2, $\cdots$, 1.0\} の11個のrecallレベルでのprecisionで代表させ，それらの平均値を計算したものである(\ref{fig:PR11})：
 $$ \mbox{AP}_{11} = \frac{1}{11} \sum_{R\in\{0, 0.1, 0.2, \cdots, 1.0\}} P_{\rm interp}(R). $$
-%$$ \mbox{AP}_{11} = \frac{1}{11} \sum_{R\in\{0\}}$$
 \begin{figure}
     \centering
     \includegraphics[width=7cm,clip]{fig/PR_11.eps}
